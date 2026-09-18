@@ -1,0 +1,12 @@
+*.pdf
+*.doc
+*.docx
+page*.png
+data/ocr-lines.json
+data/pdf-lines.json
+data/source.txt
+node_modules/
+output/
+scripts/
+.playwright-cli/
+.DS_Store
