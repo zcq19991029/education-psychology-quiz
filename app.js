@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609180944';
+const DATA_VERSION = '202609180947';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -17,6 +17,7 @@ let duplicateDecisions = new Map();
 let history = [], forward = [];
 const explanationCache = new Map();
 let askHistory = [], activeSpeechRecognition = null, speechKeepListening = false;
+let excludedOptions = new Set(), excludedQuestionId = null;
 
 function recordKey() { return `zcq-progress-v2:${profileId}:${subject}`; }
 function prefsKey() { return `zcq-prefs-v1:${profileId}`; }
@@ -226,8 +227,9 @@ async function sendAskMessage() {
 function answerText(q) { return q.type === 'judgment' ? (q.answer[0] === 'T' ? '正确' : '错误') : q.answer.join('、'); }
 function optionLabel(q, key) { const item = q.options.find(o => o.key === key); return item ? `${key}「${item.text}」` : key; }
 function renderOption(q, o) {
+  if (excludedQuestionId !== q.id) { excludedQuestionId = q.id; excludedOptions = new Set(); }
   const chosen = selected.has(o.key), correct = q.answer.includes(o.key);
-  const className = answered ? (correct ? 'correct' : chosen ? 'incorrect' : '') : chosen ? 'selected' : '';
+  const className = answered ? (correct ? 'correct' : chosen ? 'incorrect' : '') : chosen ? 'selected' : excludedOptions.has(o.key) ? 'excluded' : '';
   const label = o.key === 'T' ? '✓' : o.key === 'F' ? '×' : o.key;
   return `<button class="option ${className}" data-option="${esc(o.key)}" ${answered ? 'disabled' : ''} aria-pressed="${chosen}"><span class="letter">${esc(label)}</span><span>${esc(o.text)}</span></button>`;
 }
@@ -276,7 +278,12 @@ function renderCard() {
     <h3 class="question-title">${esc(q.stem)}</h3><div class="option-list">${q.options.map(o => renderOption(q, o)).join('')}</div>
     ${q.type === 'multiple' && !answered ? `<div class="submit-row"><button class="submit-btn" id="submitAnswer" ${selected.size ? '' : 'disabled'}>确认答案</button></div>` : ''}
     ${answered ? renderFeedback(q) : ''}${answered && scope === 'reviewed' ? '<button id="retryAnswerBtn" class="retry-answer">重新作答</button>' : ''}${answered && scope === 'known' ? '<button id="restoreKnownBtn" class="retry-answer">移回待掌握，重新刷</button>' : ''}`;
-  card.querySelectorAll('[data-option]').forEach(button => button.onclick = () => choose(button.dataset.option));
+  card.querySelectorAll('[data-option]').forEach(button => {
+    let timer = null, longPressed = false;
+    button.onclick = () => { if (longPressed) { longPressed = false; return; } choose(button.dataset.option); };
+    button.addEventListener('pointerdown', () => { if (answered) return; timer = setTimeout(() => { excludedOptions.has(button.dataset.option) ? excludedOptions.delete(button.dataset.option) : excludedOptions.add(button.dataset.option); longPressed = true; button.classList.toggle('excluded'); }, 480); });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(name => button.addEventListener(name, () => { clearTimeout(timer); timer = null; }));
+  });
   $('#submitAnswer')?.addEventListener('click', submit);
   $('#openAiSettingsBtn')?.addEventListener('click', () => setView('settings'));
   $('#restoreKnownBtn')?.addEventListener('click', () => classify('unknown'));
@@ -502,7 +509,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0944';
+    version.textContent = ' · 版本 2026.09.18-0947';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
