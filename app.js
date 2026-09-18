@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609180839';
+const DATA_VERSION = '202609180847';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -51,9 +51,19 @@ function loadRecords() {
   if (profileId === 'default' && subject === 'psychology' && !localStorage.getItem(recordKey())) {
     try { records = JSON.parse(localStorage.getItem('edu-psychology-review-v1') || '{}') || {}; saveRecords(); } catch { /* ignore */ }
   }
+  let nextOrder = 0, changed = false;
+  for (const record of Object.values(records)) if (Number.isFinite(record.reviewOrder)) nextOrder = Math.max(nextOrder, record.reviewOrder);
+  for (const record of Object.values(records)) {
+    if (record.attempts > 0 && !Number.isFinite(record.reviewOrder)) { record.reviewOrder = ++nextOrder; changed = true; }
+  }
+  if (changed) saveRecords();
 }
 function saveRecords() { localStorage.setItem(recordKey(), JSON.stringify(records)); }
 function recordFor(id) { return records[id] || { status: 'new', attempts: 0, wrong: 0 }; }
+function nextReviewOrder() { return Math.max(0, ...Object.values(records).map(record => Number(record.reviewOrder) || 0)) + 1; }
+function orderedReviewedQuestions(items = questions.filter(q => recordFor(q.id).attempts > 0)) {
+  return [...items].sort((a, b) => (recordFor(a.id).reviewOrder || Number.MAX_SAFE_INTEGER) - (recordFor(b.id).reviewOrder || Number.MAX_SAFE_INTEGER));
+}
 function initProfiles() {
   try { profiles = JSON.parse(localStorage.getItem(PROFILE_KEY) || '[]'); } catch { profiles = []; }
   if (!Array.isArray(profiles) || !profiles.length) profiles = [{ id: 'default', name: '我的学习' }];
@@ -76,7 +86,9 @@ function shuffle(items) { const a = [...items]; for (let i = a.length - 1; i > 0
 function buildQueue(resume = true) {
   if (transitionTimer) clearTimeout(transitionTimer);
   transitioning = false; transitionTimer = null;
-  const ids = questions.filter(eligible).map(q => q.id);
+  if (scope === 'reviewed' || scope === 'known') resume = false;
+  const eligibleQuestions = questions.filter(eligible);
+  const ids = (scope === 'reviewed' || scope === 'known' ? orderedReviewedQuestions(eligibleQuestions) : eligibleQuestions).map(q => q.id);
   if (resume) {
     try {
       const state = JSON.parse(localStorage.getItem(sessionKey()) || 'null');
@@ -118,7 +130,8 @@ function nextCard() {
   if (forward.length) { restoreCard(forward.pop()); return; }
   let next = queue.shift();
   if (!next) {
-    const ids = questions.filter(eligible).map(q => q.id);
+    const eligibleQuestions = questions.filter(eligible);
+    const ids = (scope === 'reviewed' || scope === 'known' ? orderedReviewedQuestions(eligibleQuestions) : eligibleQuestions).map(q => q.id);
     if (!ids.length) { currentId = null; render(); saveSession(); return; }
     round++; queue = mode === 'random' ? shuffle(ids) : ids; next = queue.shift(); viewed = 0;
   }
@@ -282,7 +295,23 @@ function openReviewedQuestion(id) {
   currentId = id; selected = new Set(recordFor(id).lastAnswer || []); answered = selected.size > 0;
   explanationState = null; render(); saveSession(); setView('practice');
 }
-function render() { renderStats(); renderCard(); renderOverview(); }
+function renderReviewNavigator() {
+  const panel = $('#reviewNavigator');
+  if (!panel) return;
+  if (scope !== 'reviewed' && scope !== 'known') { panel.classList.add('hidden'); panel.innerHTML = ''; return; }
+  const ordered = orderedReviewedQuestions(questions.filter(q => q.type === type && (scope === 'known' ? recordFor(q.id).status === 'known' : recordFor(q.id).attempts > 0)));
+  if (!ordered.length) { panel.classList.add('hidden'); panel.innerHTML = ''; return; }
+  panel.classList.remove('hidden');
+  panel.innerHTML = `<div class="review-nav-head"><strong>${scope === 'known' ? '已记住题目' : '已刷题目'} · 按作答顺序</strong><span>点击编号直接查看　✓ 已记住　! 有错题</span></div><div class="review-number-grid">${ordered.map((q, index) => { const record = recordFor(q.id); return `<button type="button" class="review-number ${q.id === currentId ? 'current' : ''} ${record.status === 'known' ? 'known' : ''} ${record.wrong ? 'wrong' : ''}" data-review-jump="${esc(q.id)}" title="第 ${index + 1} 个作答：${esc(q.stem)}">${index + 1}</button>`; }).join('')}</div>`;
+  panel.querySelectorAll('[data-review-jump]').forEach(button => button.onclick = () => {
+    const id = button.dataset.reviewJump, index = ordered.findIndex(q => q.id === id);
+    if (index < 0) return;
+    currentId = id; queue = ordered.slice(index + 1).map(q => q.id); history = []; forward = [];
+    selected = new Set(recordFor(id).lastAnswer || []); answered = selected.size > 0; explanationState = null;
+    render(); saveSession();
+  });
+}
+function render() { renderStats(); renderReviewNavigator(); renderCard(); renderOverview(); }
 function choose(key) {
   const q = currentQuestion(); if (!q || answered || !key) return;
   if (q.type === 'multiple') { selected.has(key) ? selected.delete(key) : selected.add(key); renderCard(); saveSession(); }
@@ -293,7 +322,7 @@ function submit() {
   answered = true;
   const correct = q.answer.length === selected.size && q.answer.every(a => selected.has(a));
   const previous = recordFor(q.id);
-  records[q.id] = { ...previous, attempts: previous.attempts + 1, wrong: previous.wrong + (correct ? 0 : 1), lastAnswer: [...selected], lastCorrect: correct };
+  records[q.id] = { ...previous, reviewOrder: previous.reviewOrder || nextReviewOrder(), attempts: previous.attempts + 1, wrong: previous.wrong + (correct ? 0 : 1), lastAnswer: [...selected], lastCorrect: correct };
   saveRecords(); render(); saveSession();
 }
 async function generateExplanation() {
@@ -466,7 +495,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0839';
+    version.textContent = ' · 版本 2026.09.18-0847';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
