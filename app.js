@@ -417,7 +417,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0600';
+    version.textContent = ' · 版本 2026.09.18-0630';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
@@ -454,6 +454,7 @@ function bind() {
   if (!localStorage.getItem('zcq-announcement-seen')) setTimeout(showAnnouncement, 250);
   const exitImmersive = () => {
     document.body.classList.remove('immersive-mode');
+    document.querySelector('.help-panel')?.style.removeProperty('display');
     $('#immersiveBtn').textContent = '⛶ 沉浸式刷题';
     if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
   };
@@ -461,6 +462,7 @@ function bind() {
     if (document.body.classList.contains('immersive-mode')) { exitImmersive(); return; }
     setView('practice');
     document.body.classList.add('immersive-mode');
+    document.querySelector('.help-panel')?.style.setProperty('display', 'none', 'important');
     $('#immersiveBtn').textContent = '× 退出沉浸式';
     try { await document.documentElement.requestFullscreen?.(); } catch { /* 浏览器拒绝全屏时仍保留沉浸布局 */ }
   };
