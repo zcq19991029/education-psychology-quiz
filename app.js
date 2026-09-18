@@ -417,7 +417,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0617';
+    version.textContent = ' · 版本 2026.09.18-0618';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
@@ -501,8 +501,35 @@ function bind() {
     else if (event.key === 'ArrowRight' && answered) classify('unknown');
   });
   let touchStart;
-  $('#questionCard').addEventListener('touchstart', event => { touchStart = { x: event.touches[0].clientX, y: event.touches[0].clientY }; }, { passive: true });
-  $('#questionCard').addEventListener('touchend', event => { if (!touchStart || !answered) return; const dx = event.changedTouches[0].clientX - touchStart.x, dy = event.changedTouches[0].clientY - touchStart.y; if (Math.abs(dx) > 75 && Math.abs(dx) > Math.abs(dy) * 1.4) classify(dx < 0 ? 'known' : 'unknown'); touchStart = null; }, { passive: true });
+  const card = $('#questionCard');
+  card.addEventListener('touchstart', event => {
+    if (!answered) return;
+    const point = event.touches[0];
+    touchStart = { x: point.clientX, y: point.clientY };
+    card.classList.add('is-dragging');
+  }, { passive: true });
+  card.addEventListener('touchmove', event => {
+    if (!touchStart || !answered) return;
+    const point = event.touches[0];
+    const dx = point.clientX - touchStart.x;
+    const dy = point.clientY - touchStart.y;
+    if (Math.abs(dx) < Math.abs(dy) * 1.15) return;
+    event.preventDefault();
+    const limit = Math.min(Math.abs(dx), 180);
+    card.style.transform = `translateX(${dx < 0 ? -limit : limit}px) rotate(${dx < 0 ? -Math.min(limit / 35, 5) : Math.min(limit / 35, 5)}deg)`;
+    card.classList.toggle('swipe-left', dx < -24);
+    card.classList.toggle('swipe-right', dx > 24);
+  }, { passive: false });
+  card.addEventListener('touchend', event => {
+    if (!touchStart || !answered) return;
+    const dx = event.changedTouches[0].clientX - touchStart.x;
+    const dy = event.changedTouches[0].clientY - touchStart.y;
+    const commit = Math.abs(dx) > 75 && Math.abs(dx) > Math.abs(dy) * 1.4;
+    card.classList.remove('is-dragging', 'swipe-left', 'swipe-right');
+    card.style.transform = '';
+    if (commit) classify(dx < 0 ? 'known' : 'unknown');
+    touchStart = null;
+  }, { passive: true });
 }
 async function init() {
   try {
