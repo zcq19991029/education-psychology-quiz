@@ -179,9 +179,9 @@ function renderFeedback(q) {
     ? `<div class="option-analysis"><strong>逐项解析</strong>${q.options.map(o => `<div class="analysis-row ${q.answer.includes(o.key) ? 'is-correct' : 'is-wrong'}"><b>${esc(o.key)}</b><span>${esc(details[o.key])}</span></div>`).join('')}</div>` : '';
   let aiHtml = analysis;
   if (explanationState?.status === 'loading') aiHtml += `<div class="stream-analysis"><strong>AI 正在逐项解析…</strong>${explanationState.text ? `<div class="stream-text">${esc(explanationState.text)}</div>` : ''}</div>`;
-  else if (explanationState?.status === 'error') aiHtml += `<p class="error-message">AI 解析失败：${esc(explanationState.text)} <button id="retryExplainBtn" class="text-btn">重试</button></p>`;
+  else if (explanationState?.status === 'error') aiHtml += `<p class="error-message">AI 解析失败：${esc(explanationState.text)} <button id="retryExplainBtn" type="button" class="text-btn">重试</button></p>`;
   else if (!analysis && !getSettings().apiKey) aiHtml = '<p class="ai-message">想看四个选项各自的原因？<button id="openAiSettingsBtn" class="text-btn">设置 AI Key</button></p>';
-  else if (!analysis) aiHtml = '<button id="retryExplainBtn" class="text-btn">查看 AI 逐项解析</button>';
+  else if (!analysis) aiHtml = '<button id="retryExplainBtn" type="button" class="text-btn">查看 AI 逐项解析</button>';
   return `<div class="feedback"><div class="feedback-header ${correct ? 'good' : 'bad'}"><span>${correct ? '✓' : '✗'}</span>${correct ? '回答正确' : '回答有误'}</div><div class="feedback-detail">
     <p class="answer-label"><strong>正确答案：</strong>${esc(answerText(q))}</p>
     ${q.explanation ? `<p><strong>资料校对说明：</strong>${esc(q.explanation)}</p>` : ''}
@@ -214,7 +214,6 @@ function renderCard() {
     ${answered ? renderFeedback(q) : ''}${answered && scope === 'reviewed' ? '<button id="retryAnswerBtn" class="retry-answer">重新作答</button>' : ''}`;
   card.querySelectorAll('[data-option]').forEach(button => button.onclick = () => choose(button.dataset.option));
   $('#submitAnswer')?.addEventListener('click', submit);
-  $('#retryExplainBtn')?.addEventListener('click', generateExplanation);
   $('#openAiSettingsBtn')?.addEventListener('click', () => setView('settings'));
   $('#retryAnswerBtn')?.addEventListener('click', () => { selected = new Set(); answered = false; explanationState = null; renderCard(); saveSession(); });
 }
@@ -416,7 +415,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0702';
+    version.textContent = ' · 版本 2026.09.18-0703';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
@@ -501,6 +500,12 @@ function bind() {
   });
   let swipeStart;
   const card = $('#questionCard');
+  card.addEventListener('click', event => {
+    if (event.target.closest('#retryExplainBtn')) {
+      event.preventDefault();
+      generateExplanation();
+    }
+  });
   card.addEventListener('pointerdown', event => {
     swipeStart = { x: event.clientX, y: event.clientY, pointerId: event.pointerId };
     card.setPointerCapture?.(event.pointerId);
