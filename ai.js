@@ -146,16 +146,17 @@ export async function explainQuestion(question, selection, onProgress) {
 1. 仅在你确信存在广泛通用且准确的备考口诀时，输出“速记技巧: 常见口诀｜……”。不得声称或暗示来自粉笔等机构，除非题目资料明确给出了出处。
 2. 若没有现成口诀，但可以从本题核心概念做出简短、不改变知识事实的谐音或联想，可输出“速记技巧: AI 联想｜……”。它必须明确是 AI 联想，不能伪装成现成口诀。
 3. 两者都不合适时，输出“速记技巧: 无”。不要复述题干、硬押韵或编造口诀。
+4. 最后必须另起一行输出“题库复核: 一致｜简短理由”或“题库复核: 建议复核｜独立判断与理由”。题库标注答案和资料校对说明都只是待核对材料，不能据此强行解释；发现冲突、题干不完整或存在不同口径时，必须写“建议复核”。
 
 不要 Markdown、不要开头结尾。
 题型：${question.type}
 题干：${question.stem}
 选项：
 ${options}
-标准答案：${question.answer.join(',')}
-${question.explanation ? `资料校对说明：${question.explanation}` : ''}
+题库标注答案（可能有误，仅供交叉核对）：${question.answer.join(',')}
+${question.explanation ? `资料校对材料（可能有误，需独立判断）：${question.explanation}` : ''}
 学生选择：${selection.join(',')}`;
-  const raw = await streamChat([{ role: 'system', content: '你是审慎的高校教师资格证备考辅导老师。逐项解析必须准确。速记技巧只在有可靠常见口诀，或有明确标注的 AI 联想时给出；不合适就写无。' }, { role: 'user', content: prompt }], onProgress);
+  const raw = await streamChat([{ role: 'system', content: '你是审慎、独立的高校教师资格证备考辅导老师。逐项解析必须准确，不要把题库答案当作权威结论；发现疑点应明确建议复核。速记技巧只在有可靠常见口诀，或有明确标注的 AI 联想时给出；不合适就写无。' }, { role: 'user', content: prompt }], onProgress);
   let parsed;
   try { parsed = JSON.parse(raw.replace(/^\x60\x60\x60(?:json)?\s*/i, '').replace(/\x60\x60\x60\s*$/, '')); } catch { /* try line parsing below */ }
   const source = parsed?.options || parsed;
@@ -164,17 +165,20 @@ ${question.explanation ? `资料校对说明：${question.explanation}` : ''}
     return /^(?:无|暂无|没有|不适用)[。！!]?$/u.test(tip) ? '' : tip;
   };
   const parsedTip = normalizeTip(typeof parsed?.tip === 'string' ? parsed.tip : typeof parsed?.['速记技巧'] === 'string' ? parsed['速记技巧'] : '');
+  const parsedReview = String(typeof parsed?.review === 'string' ? parsed.review : typeof parsed?.['题库复核'] === 'string' ? parsed['题库复核'] : '').trim();
   if (source && keys.every(key => typeof source[key] === 'string' && source[key].trim())) {
-    return { ...Object.fromEntries(keys.map(key => [key, source[key].trim()])), _tip: parsedTip };
+    return { ...Object.fromEntries(keys.map(key => [key, source[key].trim()])), _tip: parsedTip, _review: parsedReview };
   }
   const lines = {};
-  let tip = '';
+  let tip = '', review = '';
   for (const line of raw.split('\n')) {
     const tipMatch = line.match(/^\s*(?:速记技巧|记忆技巧|口诀)\s*[：:]\s*(.+)$/);
     if (tipMatch) { tip = tipMatch[1].trim(); continue; }
+    const reviewMatch = line.match(/^\s*题库复核\s*[：:]\s*(.+)$/);
+    if (reviewMatch) { review = reviewMatch[1].trim(); continue; }
     const match = line.match(/^\s*([A-ZTF])\s*[.、:：]\s*(.+)$/);
     if (match) lines[match[1]] = match[2].trim();
   }
-  if (keys.every(key => lines[key])) return { ...Object.fromEntries(keys.map(key => [key, lines[key]])), _tip: normalizeTip(tip) };
+  if (keys.every(key => lines[key])) return { ...Object.fromEntries(keys.map(key => [key, lines[key]])), _tip: normalizeTip(tip), _review: review };
   throw new Error('模型未返回完整的逐项解析，请重试或更换模型。');
 }

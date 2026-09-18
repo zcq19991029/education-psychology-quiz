@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609180902';
+const DATA_VERSION = '202609180906';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -235,7 +235,8 @@ function renderFeedback(q) {
   const tip = details?._tip
     ? `<div class="memory-tip"><strong>✦ 速记技巧</strong><span>${esc(details._tip)}</span></div>`
     : details ? '<p class="tip-unavailable">本题暂无可靠口诀或合适联想，因此不额外编造。</p>' : '';
-  let aiHtml = analysis + tip;
+  const review = details?._review ? `<p class="ai-review ${details._review.startsWith('建议复核') ? 'needs-review' : ''}"><strong>AI 独立复核：</strong>${esc(details._review)}</p>` : '';
+  let aiHtml = analysis + review + tip;
   if (explanationState?.status === 'loading') aiHtml += `<div class="stream-analysis"><strong>AI 正在逐项解析…</strong>${explanationState.text ? `<div class="stream-text">${esc(explanationState.text)}</div>` : ''}</div>`;
   else if (explanationState?.status === 'error') aiHtml += `<p class="error-message">AI 解析失败：${esc(explanationState.text)} <button id="retryExplainBtn" type="button" class="ai-explain-btn compact">重新尝试</button></p>`;
   else if (!analysis && !getSettings().apiKey) aiHtml = '<p class="ai-message">想看四个选项各自的原因？<button id="openAiSettingsBtn" class="text-btn">设置 AI Key</button></p>';
@@ -329,7 +330,7 @@ function submit() {
 async function generateExplanation() {
   const q = currentQuestion(); if (!q || !answered) return;
   const id = currentId, selection = [...selected], requestProfile = profileId, requestSubject = subject;
-  const settings = getSettings(), cacheKey = `${requestProfile}:${settings.baseUrl}:${settings.model}:tip-v4:${q.id}:${selection.join(',')}`;
+  const settings = getSettings(), cacheKey = `${requestProfile}:${settings.baseUrl}:${settings.model}:tip-v5:${q.id}:${selection.join(',')}`;
   if (explanationCache.has(cacheKey)) { explanationState = { status: 'done', details: explanationCache.get(cacheKey) }; renderCard(); return; }
   explanationState = { status: 'loading' }; renderCard();
   try {
@@ -496,7 +497,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0902';
+    version.textContent = ' · 版本 2026.09.18-0906';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
