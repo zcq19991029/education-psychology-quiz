@@ -426,6 +426,21 @@ function bind() {
   $('#materialFile').onchange = event => { $('#fileStatus').textContent = event.target.files[0]?.name || '尚未选择文件'; };
   $('#startImportBtn').onclick = startImport;
   $('#noticeAiBtn').onclick = () => setView('settings');
+  const exitImmersive = () => {
+    document.body.classList.remove('immersive-mode');
+    $('#immersiveBtn').textContent = '⛶ 沉浸式刷题';
+    if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+  };
+  $('#immersiveBtn').onclick = async () => {
+    if (document.body.classList.contains('immersive-mode')) { exitImmersive(); return; }
+    setView('practice');
+    document.body.classList.add('immersive-mode');
+    $('#immersiveBtn').textContent = '× 退出沉浸式';
+    try { await document.documentElement.requestFullscreen?.(); } catch { /* 浏览器拒绝全屏时仍保留沉浸布局 */ }
+  };
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && document.body.classList.contains('immersive-mode')) exitImmersive();
+  });
   $('#announcementToggle').onclick = event => {
     const announcement = event.currentTarget.closest('.announcement');
     const collapsed = announcement.classList.toggle('is-collapsed');
@@ -444,6 +459,7 @@ function bind() {
     link.click(); setTimeout(() => URL.revokeObjectURL(link.href), 1000);
   };
   document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && document.body.classList.contains('immersive-mode')) { exitImmersive(); return; }
     if (view !== 'practice' || $('#resetDialog').open || event.altKey || event.ctrlKey || event.metaKey || ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
     const q = currentQuestion(); if (!q) return;
     if (/^[1-4]$/.test(event.key) && !answered) choose(q.options[Number(event.key) - 1]?.key);
