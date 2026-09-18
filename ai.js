@@ -46,17 +46,30 @@ function endpoint(baseUrl, suffix) {
   return `${url}${suffix}`;
 }
 
+async function fetchWithTimeout(url, options, timeoutMs = 30000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } catch (error) {
+    if (error?.name === 'AbortError') throw new Error(`请求超时（${Math.round(timeoutMs / 1000)} 秒）。请检查模型可用性、余额或网络后重试。`);
+    throw error;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 export async function chat(messages, { json = false } = {}) {
   const settings = getSettings();
   if (!settings.apiKey) throw new Error('请先在 AI 设置中填写 API Key。');
   if (!settings.model.trim()) throw new Error('请先选择或填写模型名称。');
-  const response = await fetch(endpoint(settings.baseUrl, '/chat/completions'), {
+  const response = await fetchWithTimeout(endpoint(settings.baseUrl, '/chat/completions'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${settings.apiKey}` },
     body: JSON.stringify({ model: settings.model.trim(), messages, temperature: 0.2,
       ...(settings.provider === 'deepseek' ? { thinking: { type: 'disabled' } } : {}),
       ...(json ? { response_format: { type: 'json_object' } } : {}) })
-  });
+  }, 25000);
   let data;
   try { data = await response.json(); } catch { throw new Error(`接口返回了非 JSON 内容（HTTP ${response.status}）。`); }
   if (!response.ok) {
@@ -71,7 +84,7 @@ export async function chat(messages, { json = false } = {}) {
 export async function listModels() {
   const { baseUrl, apiKey } = getSettings();
   if (!apiKey) throw new Error('请先填写 API Key。');
-  const response = await fetch(endpoint(baseUrl, '/models'), { headers: { Authorization: `Bearer ${apiKey}` } });
+  const response = await fetchWithTimeout(endpoint(baseUrl, '/models'), { headers: { Authorization: `Bearer ${apiKey}` } }, 15000);
   if (!response.ok) throw new Error(`读取模型列表失败（HTTP ${response.status}）。可手动填写模型 ID。`);
   const data = await response.json();
   return (data.data || []).map(item => item.id).filter(Boolean).sort();
@@ -81,13 +94,13 @@ async function streamChat(messages, onProgress) {
   const settings = getSettings();
   if (!settings.apiKey) throw new Error('请先在 AI 设置中填写 API Key。');
   if (!settings.model.trim()) throw new Error('请先选择或填写模型名称。');
-  const response = await fetch(endpoint(settings.baseUrl, '/chat/completions'), {
+  const response = await fetchWithTimeout(endpoint(settings.baseUrl, '/chat/completions'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${settings.apiKey}` },
     body: JSON.stringify({ model: settings.model.trim(), messages, temperature: 0.2,
       max_tokens: 800, stream: true,
       ...(settings.provider === 'deepseek' ? { thinking: { type: 'disabled' } } : {}) })
-  });
+  }, 45000);
   if (!response.ok) {
     let message = `接口请求失败（HTTP ${response.status}）。`;
     try { const data = await response.json(); message = data.error?.message || data.message || message; } catch { /* use status */ }
