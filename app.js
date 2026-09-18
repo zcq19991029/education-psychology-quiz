@@ -427,7 +427,7 @@ function bind() {
     version.className = 'app-version';
     version.textContent = ' · 版本 2026.09.18-0703';
     versionHost.appendChild(version);
-    version.textContent = ' · 版本 2026.09.18-0708';
+    version.textContent = ' · 版本 2026.09.18-0710';
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
   $('#addProfileBtn').onclick = async () => {
