@@ -7,7 +7,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; worker-src 'self' blob:; connect-src 'self' https: http://localhost:* http://127.0.0.1:*; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'none'" />
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <title>高校资格证刷题zcq版</title>
-  <link rel="stylesheet" href="./styles.css?v=202609180957" />
+  <link rel="stylesheet" href="./styles.css?v=202609181005" />
 </head>
 <body>
   <div class="shell">
@@ -54,6 +54,6 @@
   <dialog id="themeDialog" class="theme-dialog"><h3>主题外观</h3><p>选择预设色，或上传一张背景图。主题只保存在当前浏览器，不会影响刷题记录。</p><div class="theme-swatches"><button type="button" data-theme="green" class="theme-swatch green">默认绿</button><button type="button" data-theme="blue" class="theme-swatch blue">静谧蓝</button><button type="button" data-theme="purple" class="theme-swatch purple">暮紫</button><button type="button" data-theme="warm" class="theme-swatch warm">暖杏</button></div><label class="field-label" for="themeOpacity">界面透明度 <output id="themeOpacityValue">90%</output></label><input id="themeOpacity" type="range" min="15" max="100" value="90" /><label class="field-label" for="themeImage">自定义背景图片</label><input id="themeImage" type="file" accept="image/*" /><p id="themeStatus" class="muted"></p><div><button id="resetTheme" type="button">恢复默认主题</button><button id="closeTheme" type="button">完成</button></div></dialog>
   <button id="aiAskLauncher" class="ai-ask-launcher" type="button">✦ 提问 AI</button>
   <section id="aiAskWindow" class="ai-ask-window hidden" aria-label="AI 提问窗口"><div id="aiAskDragHandle" class="ask-head"><div><h3>提问 AI</h3><p id="aiAskContext">自由提问，不受题库限制。</p></div><button id="closeAiAsk" type="button" aria-label="关闭提问窗口">×</button></div><div id="aiAskMessages" class="ask-messages" aria-live="polite"><div class="ask-message assistant">你好。你可以自由提问；我会独立判断，不把题库答案当作唯一结论。</div></div><div class="ask-composer"><textarea id="aiAskInput" rows="3" placeholder="输入任何学习、知识或解析问题…"></textarea><label class="ask-reference"><input id="askUseQuestion" type="checkbox" /> 引用当前题目作参考（不传入题库标准答案）</label><div class="ask-actions"><button id="aiAskMic" type="button" class="ask-mic">◉ 语音输入</button><span id="aiAskStatus"></span><button id="askSettingsBtn" type="button" class="ask-settings">AI 设置</button><button id="aiAskSend" type="button" class="primary-btn">发送</button></div></div></section>
-  <script type="module" src="./app.js?v=202609180957"></script>
+  <script type="module" src="./app.js?v=202609181005"></script>
 </body>
 </html>
