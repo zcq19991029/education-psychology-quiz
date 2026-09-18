@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609180858';
+const DATA_VERSION = '202609180902';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -329,7 +329,7 @@ function submit() {
 async function generateExplanation() {
   const q = currentQuestion(); if (!q || !answered) return;
   const id = currentId, selection = [...selected], requestProfile = profileId, requestSubject = subject;
-  const settings = getSettings(), cacheKey = `${requestProfile}:${settings.baseUrl}:${settings.model}:tip-v3:${q.id}:${selection.join(',')}`;
+  const settings = getSettings(), cacheKey = `${requestProfile}:${settings.baseUrl}:${settings.model}:tip-v4:${q.id}:${selection.join(',')}`;
   if (explanationCache.has(cacheKey)) { explanationState = { status: 'done', details: explanationCache.get(cacheKey) }; renderCard(); return; }
   explanationState = { status: 'loading' }; renderCard();
   try {
@@ -496,7 +496,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0858';
+    version.textContent = ' · 版本 2026.09.18-0902';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };

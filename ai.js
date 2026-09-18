@@ -140,7 +140,7 @@ export async function streamChat(messages, onProgress) {
 export async function explainQuestion(question, selection, onProgress) {
   const options = question.options.map(item => `${item.key}. ${item.text}`).join('\n');
   const keys = question.options.map(item => item.key);
-  const prompt = `请针对这道教育类考试题逐项解析。每项解释它为何符合或不符合题意，联系具体知识点；不能只重复答案。否定式题干要说明判别标准；没有依据时如实说明。每项 25-60 字。严格按选项顺序逐行输出，格式为“A: 解析”。
+  const prompt = `请针对这道教育类考试题逐项解析。每项解释它为何符合或不符合题意，联系具体知识点；不能只重复答案。否定式题干要说明判别标准；没有依据时如实说明。涉及理论的发展水平、阶段或概念归属时，必须给出准确归属，不能笼统猜测。每项 25-60 字。严格按选项顺序逐行输出，格式为“A: 解析”。
 
 所有选项结束后，再按规则决定是否输出速记技巧：
 1. 仅在你确信存在广泛通用且准确的备考口诀时，输出“速记技巧: 常见口诀｜……”。不得声称或暗示来自粉笔等机构，除非题目资料明确给出了出处。
@@ -153,6 +153,7 @@ export async function explainQuestion(question, selection, onProgress) {
 选项：
 ${options}
 标准答案：${question.answer.join(',')}
+${question.explanation ? `资料校对说明：${question.explanation}` : ''}
 学生选择：${selection.join(',')}`;
   const raw = await streamChat([{ role: 'system', content: '你是审慎的高校教师资格证备考辅导老师。逐项解析必须准确。速记技巧只在有可靠常见口诀，或有明确标注的 AI 联想时给出；不合适就写无。' }, { role: 'user', content: prompt }], onProgress);
   let parsed;
