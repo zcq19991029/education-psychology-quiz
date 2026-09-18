@@ -1,32 +1,64 @@
-# 教育心理学刷题网页
+<div align="center">
 
-根据《教育心理学题库》的 Word 原文与 PDF 校对制作的刷题网页，共 **460 题**：单选 135 题、多选 85 题、判断 240 题。题目数据保存在 `data/questions.json`，每位使用者的学习记录分别保存在自己浏览器的 `localStorage` 中。
+# 高校资格证刷题zcq版
 
-在线刷题：<https://zcq19991029.github.io/education-psychology-quiz/>
+**教育心理学已收录 460 题 · 教育学题库待上传**
 
-## 启动
+答题 → 看红绿反馈和针对性解析 → 已记住的划走，还不会的进入下一轮。
 
-在本目录打开终端，运行：
+[**在线开始刷题 ↗**](https://zcq19991029.github.io/education-psychology-quiz/)
+
+</div>
+
+<p align="center"><img src="docs/images/desktop.png" alt="高校资格证刷题zcq版桌面端：科目切换、题型选择、题目卡片与学习统计" width="960" /></p>
+
+## 一眼看懂
+
+| 刷题 | 题库与 AI | 个人进度 |
+| --- | --- | --- |
+| 单选 135、多选 85、判断 240 道教育心理学题 | 上传 PDF、DOCX、TXT、MD 或 JSON；可粘贴文字 | 本地学习账号分别保存进度 |
+| 顺序或随机；全部、错题、未做筛选 | DeepSeek、硅基流动预设与自定义模型 ID | 教育心理学与教育学分别统计 |
+| 答错标红，正确项标绿；手机滑动，电脑按钮或快捷键 | 接入自己的 API Key 后，按作答实时生成针对性解析 | 已记住题目退出待掌握池，还不会的继续出现 |
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%"><strong>手机刷题</strong><br /><img src="docs/images/mobile.png" alt="移动端的科目切换、单选卡片和复习按钮" width="300" /></td>
+    <td align="center" valign="top" width="50%"><strong>答案反馈</strong><br /><img src="docs/images/feedback.png" alt="错选 C 标红，正确 D 标绿，并解释为什么 D 符合题意" width="300" /></td>
+  </tr>
+</table>
+
+## 资料导入
+
+选择侧边栏的**教育学**或**教育心理学**，再点**导入资料**。JSON 题库可以直接预览和导入；PDF、DOCX、TXT、MD、粘贴文字会调用你在 **AI 设置** 中配置的模型，识别单选、多选、判断和答案。预览中可以改题型、答案，或删除识别错误的题目，确认后才会加入当前科目。
+
+<p align="center"><img src="docs/images/import.png" alt="导入资料页面，支持选择文件、粘贴资料并预览识别结果" width="760" /></p>
+
+**网页导入的题目保存在当前浏览器。**要将教育学题库发布给所有访问者，点“导出当前科目题库 JSON”，核对后把下载的 `education.json` 更新到仓库的 [data/education.json](data/education.json)。教育心理学对应 [data/questions.json](data/questions.json)。这一步需要仓库维护者提交并推送，GitHub Pages 随后会更新公共题库。扫描版 PDF 需要先做 OCR；旧版 `.doc` 请另存为 `.docx`。
+
+## AI 解析与模型
+
+到 **AI 设置** 选择服务商，填写 API Key，使用预设模型或输入自定义模型 ID。预设包含 DeepSeek 的 `deepseek-flash`、`deepseek-v4-pro`，以及硅基流动的 `deepseek-ai/DeepSeek-V4-Flash`、`Pro/deepseek-ai/DeepSeek-V4`、`Qwen/Qwen3.6-27B`。也可以读取服务商当前可用模型列表。自定义接口使用 OpenAI 兼容的 `/chat/completions` 和 `/models` 路径。
+
+<p align="center"><img src="docs/images/settings.png" alt="AI 设置页面：服务商、模型、接口地址和 API Key" width="760" /></p>
+
+答题后先显示即时红绿判题；AI 随后解释正确项与本次错选、漏选的原因。题库原文没有解析时，网站不会把通用提示冒充知识点解析。第 1 道心理学单选题已有人工补充的选项辨析。AI 内容可出错，复习时请核对原教材。
+
+Key 按**本地学习账号**分别保存在当前浏览器，默认只保存到当前浏览器会话；勾选后才长期保存在此浏览器。请求由浏览器直连服务商，本站没有收取 Key 的服务器。公共电脑用完请清除 Key。模型会更新，预设可能变化；可使用“读取可用模型”或手动填写服务商公布的模型 ID。参考：[DeepSeek 官方 API 文档](https://api-docs.deepseek.com/)、[硅基流动 Chat Completions 文档](https://docs.siliconflow.cn/docs/api/chat-completions-post)。
+
+## 学习账号与设备
+
+网站中的“学习账号”是**本地学习档案**：同一浏览器中切换名字，各自的作答与已记住状态互不影响；不同浏览器和设备天然各有本地数据。它不需要注册，也**不提供跨设备登录同步或密码保护**。公开发布的题库对所有人相同，但一个人的刷题结果不会写回 GitHub，也不会自动变成其他人的进度。
+
+如果以后需要同一人在手机和电脑之间同步，可在下一阶段接入云端认证与数据库。
+
+## 本地运行与代码
+
+需要 Node.js 18+，在项目目录运行：
 
 ```powershell
 npm start
 ```
 
-然后访问 <http://127.0.0.1:8000>。需要 Node.js 18 或更高版本，无需安装 npm 依赖。
+打开 <http://127.0.0.1:8000>。网页为静态页面，部署到 GitHub Pages 不依赖服务器。PDF 和 DOCX 读取库已放在 `vendor/`，许可证一并保留；本地运行无须执行 `npm install`。
 
-## 使用方式
-
-- 单选、多选、判断为独立模块；各模块内支持顺序刷题、随机刷题、错题强化与尚未作答范围。
-- 单选和判断题点选后即时判题；多选题选好后按「确认答案」。
-- 绿色代表正确答案，红色代表选错的答案；答题后显示答案与提示。
-- 答题后点「我已记住」或左滑，题目退出待掌握池；点「还不会，再练」或右滑，题目进入下一轮。
-- 电脑可按 `1`–`4` 选答案、`Enter` 提交多选题、`←` 记住、`→` 再练。
-- 记录仅保存在当前浏览器，换设备或清除浏览器数据会失去进度。
-
-## 数据说明
-
-Word 原文负责题干、选项和答案；PDF 用于核对版面页码、漏写答案的选项颜色，以及个别有冲突的答案。原文件仅标答案，没有系统的文字解析；网页给出选项判定与错误提示，未凭空编写专业知识解析。判断题原文从第 157 题跳到 159 题，又从第 210 题跳到 227 题，因此实际只有 240 道。PDF、Word 原件和提取中间文件不随网站公开发布。
-
-第 85 道多选题的题干标注 `ABCD`，答案行却写 `B,C,D`；同资料第 83 题把「复杂性」列为正确特征。网页采用 `ABCD`，并在该题解析中说明这个冲突。
-
-交互参考了 [BaraBara](https://github.com/megafarad/barabara) 的本地保存与简单复习思路，以及 [ZenDecks](https://github.com/SharmaMitchell/ZenDecks) 的卡片练习形式；本项目代码独立实现。
+原教育心理学题库共有单选 135、多选 85、判断 240 道，合计 **460 道**。原判断题编号有跳号，不能据末题编号推算总数。原始 Word/PDF 文件及提取中间文件未公开上传。题卡统一标注**题目来源：ZCQ**。

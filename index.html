@@ -1,56 +1,52 @@
 <!doctype html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f6f8f5" />
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <title>教育心理学 · 疯狂刷题</title>
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body>
-    <div class="shell">
-      <aside class="sidebar">
-        <div class="brand"><div class="brand-mark">心</div><div><strong>教育心理学</strong><small>高效刷题工作台</small></div></div>
-        <div class="sidebar-label">学习空间</div>
-        <button class="nav-item active" data-view="practice"><span>▣</span> 开始刷题 <b id="navRemaining">—</b></button>
-        <button class="nav-item" data-view="overview"><span>◫</span> 学习概览</button>
-        <div class="sidebar-bottom">
-          <div class="mini-note"><span>✦</span><p>每答一题，离掌握更近一步。<br />记住的题会自动退出练习。</p></div>
-          <div class="source-note">题目来源<br /><strong>教育心理学题库 · Word / PDF</strong></div>
-        </div>
-      </aside>
-
-      <main class="main">
-        <header class="topbar"><div class="breadcrumbs">学习空间 <span>/</span> <strong id="pageTitle">开始刷题</strong></div><div class="top-right"><span class="live-dot"></span> 本地自动保存</div></header>
-        <div class="content">
-          <section class="hero"><div><div class="eyebrow">YOUR STUDY SESSION <span></span> 复习进行中</div><h1>每天刷一点，<em>知识记得牢。</em></h1><p>答题后查看反馈，把会的划走，把不会的留给下一轮。</p></div><div class="hero-decoration"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="hero-book">✳</div></div></section>
-
-          <section class="stats" aria-label="学习统计">
-            <div class="stat"><div class="stat-icon sage">▤</div><div><span>题库总量</span><strong id="statTotal">—</strong></div></div>
-            <div class="stat"><div class="stat-icon blue">◈</div><div><span>待掌握</span><strong id="statRemaining">—</strong></div></div>
-            <div class="stat"><div class="stat-icon green">✓</div><div><span>已记住</span><strong id="statKnown">—</strong></div></div>
-            <div class="stat"><div class="stat-icon coral">↗</div><div><span>需重点复习</span><strong id="statWrong">—</strong></div></div>
-          </section>
-
-          <section id="practiceView" class="workspace">
-            <div class="section-heading"><div><div class="eyebrow dark">PRACTICE MODE</div><h2>开始你的专注练习</h2></div><div class="keyboard-tip">快捷键 <kbd>1-4</kbd> 选项 · <kbd>←</kbd> 记住 · <kbd>→</kbd> 再练</div></div>
-            <div class="type-tabs" role="group" aria-label="题型模块"><button class="active" data-type="single"><span>01</span><strong>单选题</strong><small id="singleCount">— 题</small></button><button data-type="multiple"><span>02</span><strong>多选题</strong><small id="multipleCount">— 题</small></button><button data-type="judgment"><span>03</span><strong>判断题</strong><small id="judgmentCount">— 题</small></button></div>
-            <div class="controls"><div class="segmented" role="group" aria-label="出题顺序"><button id="sequentialBtn" class="selected" data-mode="sequential">☷ 顺序刷题</button><button id="randomBtn" data-mode="random">⤨ 随机刷题</button></div><select id="scopeSelect" aria-label="练习范围"><option value="remaining">全部待掌握</option><option value="wrong">错题强化</option><option value="unseen">尚未作答</option></select><button id="resetBtn" class="subtle-btn" title="清空本机保存的学习记录">重置进度</button></div>
-            <div class="practice-grid"><div class="card-column">
-              <div class="session-line"><span id="sessionText">正在加载题目…</span><span id="modeText">顺序练习</span></div>
-              <div class="progress-track"><div id="progressFill"></div></div>
-              <article id="questionCard" class="question-card" aria-live="polite"></article>
-              <div class="card-actions"><button id="unknownBtn" class="action unknown" disabled><span>↩</span><div><strong>还不会，再练</strong><small>右滑 · 留在题库</small></div></button><button id="knownBtn" class="action known" disabled><div><strong>我已记住</strong><small>左滑 · 移出题库</small></div><span>✓</span></button></div>
-              <p class="swipe-tip">手机上答题后可左右滑动卡片。学习记录保存在当前浏览器。</p>
-            </div><aside class="help-panel"><div class="panel-top"><span>✧</span> 刷题指南</div><h3>用最简单的方式<br />反复巩固记忆</h3><div class="help-step"><b>01</b><div><strong>先选答案</strong><p>即时查看红绿标记与解析。</p></div></div><div class="help-step"><b>02</b><div><strong>给这题一个状态</strong><p>记住的退出题库，不会的进入下一轮。</p></div></div><div class="help-step"><b>03</b><div><strong>切换练习方式</strong><p>顺序打基础，随机查缺漏。</p></div></div><div class="panel-footer"><span>✦</span><p>建议先完整刷一遍，再用「错题强化」集中复习。</p></div></aside></div>
-          </section>
-
-          <section id="overviewView" class="workspace hidden"><div class="section-heading"><div><div class="eyebrow dark">YOUR PROGRESS</div><h2>学习概览</h2></div></div><div id="overviewContent"></div></section>
-        </div>
-      </main>
-    </div>
-    <dialog id="resetDialog"><h3>重置学习进度？</h3><p>所有已记住、错题和作答记录会从当前浏览器清除。</p><div><button id="cancelReset">取消</button><button id="confirmReset">确认重置</button></div></dialog>
-    <script type="module" src="./app.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f6f8f5" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <title>高校资格证刷题zcq版</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">知</div><div><strong>高校资格证刷题</strong><small>zcq版 · 专注复习</small></div></div>
+      <div class="sidebar-label">学习账号</div>
+      <div class="profile-row"><select id="profileSelect" aria-label="切换本地学习账号"></select><button id="addProfileBtn" title="新增本地学习账号">＋</button></div>
+      <div class="sidebar-label space-top">选择科目</div>
+      <button class="subject-item active" data-subject="psychology">教育心理学 <small id="psychologyBankCount">460 题</small></button>
+      <button class="subject-item" data-subject="education">教育学 <small id="educationBankCount">待导入</small></button>
+      <div class="sidebar-label space-top">学习空间</div>
+      <button class="nav-item active" data-view="practice"><span>▣</span> 开始刷题<b id="navRemaining">—</b></button>
+      <button class="nav-item" data-view="overview"><span>◫</span> 学习概览</button>
+      <button class="nav-item" data-view="import"><span>⇧</span> 导入资料</button>
+      <button class="nav-item" data-view="settings"><span>✦</span> AI 设置</button>
+      <div class="sidebar-bottom"><div class="mini-note"><span>✓</span><p>每个学习账号、每门科目分别记录进度。</p></div><div class="source-note">题目来源<br /><strong>ZCQ</strong></div></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div class="breadcrumbs">高校资格证刷题zcq版 <span>/</span> <strong id="pageTitle">开始刷题</strong></div><div class="top-right"><span class="live-dot"></span> 进度保存在本机</div></header>
+      <div class="content">
+        <section class="hero"><div><div class="eyebrow">YOUR STUDY SESSION <span></span> <span id="heroSubject">教育心理学</span></div><h1>每天刷一点，<em>知识记得牢。</em></h1><p>答题后看针对性解析，会的划走，不会的留给下一轮。</p></div><div class="hero-decoration"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="hero-book">✓</div></div></section>
+        <section class="stats" aria-label="学习统计">
+          <div class="stat"><div class="stat-icon sage">▤</div><div><span>本学科题目</span><strong id="statTotal">—</strong></div></div>
+          <div class="stat"><div class="stat-icon blue">◫</div><div><span>待掌握</span><strong id="statRemaining">—</strong></div></div>
+          <div class="stat"><div class="stat-icon green">✓</div><div><span>已记住</span><strong id="statKnown">—</strong></div></div>
+          <div class="stat"><div class="stat-icon coral">↗</div><div><span>重点复习</span><strong id="statWrong">—</strong></div></div>
+        </section>
+        <section id="practiceView" class="workspace">
+          <div class="section-heading"><div><div class="eyebrow dark">PRACTICE MODE</div><h2><span id="practiceSubject">教育心理学</span> · 专注练习</h2></div><div class="keyboard-tip">快捷键 <kbd>1-4</kbd> 选项 · <kbd>←</kbd> 记住 · <kbd>→</kbd> 再练</div></div>
+          <div class="type-tabs" role="group" aria-label="题型模块"><button class="active" data-type="single"><span>01</span><strong>单选题</strong><small id="singleCount">—</small></button><button data-type="multiple"><span>02</span><strong>多选题</strong><small id="multipleCount">—</small></button><button data-type="judgment"><span>03</span><strong>判断题</strong><small id="judgmentCount">—</small></button></div>
+          <div class="controls"><div class="segmented" role="group" aria-label="出题顺序"><button class="selected" data-mode="sequential">☷ 顺序刷题</button><button data-mode="random">⚄ 随机刷题</button></div><select id="scopeSelect" aria-label="练习范围"><option value="remaining">全部待掌握</option><option value="wrong">错题强化</option><option value="unseen">尚未作答</option></select><button id="resetBtn" class="subtle-btn">重置本账号本学科进度</button></div>
+          <div class="practice-grid"><div class="card-column"><div class="session-line"><span id="sessionText">正在加载题目…</span><span id="modeText">顺序练习</span></div><div class="progress-track"><div id="progressFill"></div></div><article id="questionCard" class="question-card" aria-live="polite"></article><div class="card-actions"><button id="unknownBtn" class="action unknown" disabled><span>→</span><div><strong>还不会，再练</strong><small>右滑 · 留在题库</small></div></button><button id="knownBtn" class="action known" disabled><div><strong>我已记住</strong><small>左滑 · 移出待掌握</small></div><span>✓</span></button></div><p class="swipe-tip">手机答题后可左右滑动卡片。不同学习账号和科目的进度互相独立。</p></div><aside class="help-panel"><div class="panel-top"><span>✦</span> 刷题指南</div><h3>反复巩固，<br />直到真正记住</h3><div class="help-step"><b>01</b><div><strong>先作答</strong><p>立即查看正确项与错选项。</p></div></div><div class="help-step"><b>02</b><div><strong>看解析</strong><p>连接 AI 后生成针对这次作答的说明。</p></div></div><div class="help-step"><b>03</b><div><strong>决定下一轮</strong><p>记住的退出，不会的继续刷。</p></div></div></aside></div>
+        </section>
+        <section id="overviewView" class="workspace hidden"><div class="section-heading"><div><div class="eyebrow dark">YOUR PROGRESS</div><h2>学习概览</h2></div></div><div id="overviewContent"></div></section>
+        <section id="importView" class="workspace hidden"><div class="section-heading"><div><div class="eyebrow dark">BUILD YOUR BANK</div><h2>导入资料 · <span id="importSubject">教育心理学</span></h2></div></div><div class="form-card"><p>上传 PDF、DOCX、TXT、MD 或题库 JSON，也可以粘贴文字。文字资料使用你配置的 AI 模型识别题型与答案；JSON 可直接导入。导入结果先预览，确认后才加入当前科目。</p><label class="field-label" for="materialFile">选择资料</label><input id="materialFile" type="file" accept=".pdf,.docx,.txt,.md,.json" /><p id="fileStatus" class="muted">尚未选择文件</p><label class="field-label" for="materialText">或粘贴资料文字</label><textarea id="materialText" rows="10" placeholder="在此粘贴题干、选项与答案…"></textarea><div class="form-actions"><button id="startImportBtn" class="primary-btn">识别并预览题目</button><span id="importStatus" class="muted"></span></div><p class="muted">在网页导入的题目先保存在当前浏览器。要让所有访问者都刷到新题，请导出题库 JSON 并更新 GitHub 仓库中的相应科目文件。</p><button id="exportBankBtn" class="subtle-btn">导出当前科目题库 JSON</button></div><div id="importPreview" class="hidden"></div></section>
+        <section id="settingsView" class="workspace hidden"><div class="section-heading"><div><div class="eyebrow dark">AI ASSISTANT</div><h2>AI 设置</h2></div></div><div class="form-card"><p>AI 可在答题后解释具体选项，也可从新资料中识别单选、多选和判断题。请求从你的浏览器直接发送至所选服务商。</p><label class="field-label" for="providerSelect">服务商</label><select id="providerSelect"><option value="deepseek">DeepSeek</option><option value="siliconflow">硅基流动</option><option value="custom">自定义 OpenAI 兼容接口</option></select><label class="field-label" for="baseUrlInput">接口基础地址</label><input id="baseUrlInput" type="url" placeholder="https://api.example.com/v1" /><label class="field-label" for="modelSelect">预设模型</label><div class="inline-fields"><select id="modelSelect"></select><button id="refreshModelsBtn" type="button" class="subtle-btn">读取可用模型</button></div><label class="field-label" for="customModelInput">模型 ID（可自定义）</label><input id="customModelInput" type="text" placeholder="输入模型 ID" /><label class="field-label" for="apiKeyInput">API Key</label><input id="apiKeyInput" type="password" autocomplete="off" placeholder="sk-…" /><label class="checkbox-line"><input id="rememberKey" type="checkbox" /> 在此浏览器长期保存 Key（默认仅当前会话保存）</label><div class="form-actions"><button id="saveAiBtn" class="primary-btn">保存设置</button><button id="testAiBtn" class="subtle-btn">测试连接</button><span id="aiStatus" class="muted"></span></div><p class="muted">Key 只保存在当前浏览器，不会上传到 GitHub。公共电脑使用完请清除 Key。自定义接口需支持浏览器跨域请求。</p></div></section>
+      </div>
+    </main>
+  </div>
+  <dialog id="resetDialog"><h3>重置当前账号本学科进度？</h3><p>该账号在当前科目的已记住、错题和作答记录将从本机清除。</p><div><button id="cancelReset">取消</button><button id="confirmReset">确认重置</button></div></dialog>
+  <script type="module" src="./app.js"></script>
+</body>
 </html>
