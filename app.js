@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609181145';
+const DATA_VERSION = '202609181146';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -246,7 +246,7 @@ function renderFeedback(q) {
   const tip = details?._tip
     ? `<div class="memory-tip"><strong>✦ 速记技巧</strong><span>${esc(details._tip)}</span></div>`
     : details ? '<p class="tip-unavailable">本题暂无可靠口诀或合适联想，因此不额外编造。</p>' : '';
-  const adoptButton = details?._reviewAnswer?.length ? `<span class="ai-review-controls"><select id="aiAnswerChoice" aria-label="选择要采用的正确答案" ${q.type === 'multiple' ? 'multiple' : ''}>${q.options.map(option => `<option value="${esc(option.key)}" ${details._reviewAnswer.includes(option.key) ? 'selected' : ''}>采用 ${esc(option.key)}</option>`).join('')}</select><button id="adoptAiAnswerBtn" type="button" class="ai-adopt-btn">采用所选答案</button><button id="keepBankAnswerBtn" type="button" class="ai-keep-btn">保留题库答案</button></span>` : '';
+  const adoptButton = details?._reviewAnswer?.length ? `<span class="ai-review-controls"><select id="aiAnswerChoice" aria-label="选择要采用的正确答案" ${q.type === 'multiple' ? 'multiple' : ''}>${q.options.map(option => `<option value="${esc(option.key)}" ${details._reviewAnswer.includes(option.key) ? 'selected' : ''}>采用 ${esc(option.key)}</option>`).join('')}</select><button id="adoptAiAnswerBtn" type="button" class="ai-adopt-btn">采用所选答案</button><button id="keepBankAnswerBtn" type="button" class="ai-keep-btn">保留题库答案</button><small class="ai-local-only">仅保存到本机</small></span>` : '';
   const review = details?._review ? `<p class="ai-review ${details._review.startsWith('建议复核') ? 'needs-review' : ''}"><strong>AI 独立复核：</strong>${esc(details._review)} ${adoptButton}</p>` : '';
   let aiHtml = analysis + review + tip;
   if (explanationState?.status === 'loading') aiHtml += `<div class="stream-analysis"><strong>AI 正在逐项解析…</strong>${explanationState.text ? `<div class="stream-text">${esc(explanationState.text)}</div>` : ''}</div>`;
@@ -531,7 +531,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-1145';
+    version.textContent = ' · 版本 2026.09.18-1146';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
