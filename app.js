@@ -426,6 +426,17 @@ function bind() {
   $('#materialFile').onchange = event => { $('#fileStatus').textContent = event.target.files[0]?.name || '尚未选择文件'; };
   $('#startImportBtn').onclick = startImport;
   $('#noticeAiBtn').onclick = () => setView('settings');
+  $('#announcementToggle').onclick = event => {
+    const announcement = event.currentTarget.closest('.announcement');
+    const collapsed = announcement.classList.toggle('is-collapsed');
+    event.currentTarget.textContent = collapsed ? '展开公告' : '收起公告';
+    localStorage.setItem('zcq-announcement-collapsed', collapsed ? '1' : '0');
+  };
+  if (localStorage.getItem('zcq-announcement-collapsed') === '1') {
+    const announcement = $('#announcementToggle')?.closest('.announcement');
+    announcement?.classList.add('is-collapsed');
+    if (announcement) $('#announcementToggle').textContent = '展开公告';
+  }
   $('#exportBankBtn').onclick = () => {
     const file = new Blob([JSON.stringify(questions, null, 2)], { type: 'application/json' });
     const link = document.createElement('a');
