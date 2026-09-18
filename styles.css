@@ -33,6 +33,9 @@ body.immersive-mode{background:#f6f8f5}.immersive-mode .sidebar,.immersive-mode 
   .nav-item{font-size:11px;justify-content:flex-start;padding:0 10px;gap:6px;white-space:nowrap}
   .nav-item span{display:none}
   .nav-item b{display:block;margin-left:auto}
+  .topbar{height:38px;padding:0 16px;justify-content:flex-end}
+  .breadcrumbs{display:none}
+  .top-right{font-size:10px;white-space:nowrap;overflow:visible}
 }
 .immersive-mode .practice-heading-actions{display:flex!important;position:fixed;right:18px;top:14px;z-index:20}
 .immersive-mode .practice-heading-actions .immersive-btn{display:block!important}
