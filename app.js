@@ -183,22 +183,21 @@ function renderFeedback(q) {
   else if (!analysis && !getSettings().apiKey) aiHtml = '<p class="ai-message">想看四个选项各自的原因？<button id="openAiSettingsBtn" class="text-btn">设置 AI Key</button></p>';
   else if (!analysis) aiHtml = '<button id="retryExplainBtn" class="text-btn">生成逐项解析</button>';
   return `<div class="feedback"><div class="feedback-header ${correct ? 'good' : 'bad'}"><span>${correct ? '✓' : '✗'}</span>${correct ? '回答正确' : '回答有误'}</div><div class="feedback-detail">
-    <p class="answer-label"><strong>正确答案：</strong>${esc(answerText(q))} · ${esc(q.answer.map(a => optionLabel(q, a)).join('、'))}</p>
+    <p class="answer-label"><strong>正确答案：</strong>${esc(answerText(q))}</p>
     ${q.explanation ? `<p><strong>资料校对说明：</strong>${esc(q.explanation)}</p>` : ''}
     ${aiHtml}</div></div>`;
 }
 function renderCard() {
   const card = $('#questionCard'); card.classList.remove('exit-left', 'exit-right');
   const q = currentQuestion();
-  // 进度是当前科目级别的历史累计，不随单选/多选/判断切换清零。
-  // 出题队列仍按当前题型筛选，但顶部统计回答过的题覆盖本学科全部题型。
-  const moduleQuestions = questions;
+  // 进度与回看范围按当前题型隔离，单选、多选、判断分别累计。
+  const moduleQuestions = questions.filter(item => item.type === type);
   const total = moduleQuestions.length;
   const practiced = moduleQuestions.filter(item => recordFor(item.id).attempts > 0).length;
   const unseen = total - practiced;
   const remaining = moduleQuestions.filter(item => recordFor(item.id).status !== 'known').length;
   $('#modeText').textContent = `${mode === 'random' ? '随机' : '顺序'}练习 · 第 ${round} 轮`;
-  $('#sessionText').textContent = `本学科历史已刷 ${practiced} / ${total} 题 · 未刷 ${unseen} 题 · 待掌握 ${remaining} 题`;
+  $('#sessionText').textContent = `本题型已刷 ${practiced} / ${total} 题 · 未刷 ${unseen} 题 · 待掌握 ${remaining} 题`;
   $('#progressFill').style.width = `${Math.round(practiced / Math.max(1, total) * 100)}%`;
   $('#knownBtn').disabled = !q || !answered; $('#unknownBtn').disabled = !q || !answered;
   $('#prevBtn').disabled = !history.length;
@@ -223,7 +222,7 @@ function renderOverview() {
   const s = stats();
   const attempts = Object.values(records).reduce((sum, r) => sum + (r.attempts || 0), 0);
   const wrongAttempts = Object.values(records).reduce((sum, r) => sum + (r.wrong || 0), 0);
-  const reviewed = questions.filter(q => recordFor(q.id).attempts > 0);
+  const reviewed = questions.filter(q => q.type === type && recordFor(q.id).attempts > 0);
   $('#overviewContent').innerHTML = `<div class="overview-card"><h3>${esc(SUBJECTS[subject])} · 掌握进度 ${Math.round(s.known / Math.max(1, s.total) * 100)}%</h3><p>当前学习账号：${esc(profiles.find(p => p.id === profileId)?.name)}</p><div class="overview-progress"><span style="width:${s.known / Math.max(1, s.total) * 100}%"></span></div></div><div class="overview-card"><h3>练习记录</h3><div class="overview-row"><span>已作答题目</span><strong>${s.attempted} / ${s.total}</strong></div><div class="overview-row"><span>累计作答次数</span><strong>${attempts}</strong></div><div class="overview-row"><span>累计正确率</span><strong>${attempts ? Math.round((attempts - wrongAttempts) / attempts * 100) : 0}%</strong></div><div class="overview-row"><span>待强化错题</span><strong>${s.wrong}</strong></div></div><div class="overview-card"><h3>已刷题目 · ${reviewed.length}</h3><p>点击题目查看上次作答与答案。也可以在练习范围里选择“已刷题回看”。</p><div class="review-list">${reviewed.length ? reviewed.map(q => `<button class="review-link" data-review-id="${esc(q.id)}"><span class="review-type">${q.type === 'single' ? '单选' : q.type === 'multiple' ? '多选' : '判断'}</span><span>${esc(q.stem)}</span><small>${recordFor(q.id).status === 'known' ? '已记住' : '待掌握'}</small></button>`).join('') : '<p>还没有已刷题目。</p>'}</div></div>`;
   $('#overviewContent').querySelectorAll('[data-review-id]').forEach(button => button.onclick = () => openReviewedQuestion(button.dataset.reviewId));
 }
