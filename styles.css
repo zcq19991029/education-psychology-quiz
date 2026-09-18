@@ -22,7 +22,7 @@ body.immersive-mode{background:#f6f8f5}.immersive-mode .sidebar,.immersive-mode 
 .practice-heading-actions .immersive-btn{display:none}.immersive-mode .practice-heading-actions{display:none}
 #practiceView .help-panel,#practiceView #resetBtn{display:none!important}
 .practice-heading-actions .keyboard-tip{display:none}.sidebar-shortcuts{margin:18px 2px 0;padding:13px 12px;border:1px solid #e1ece2;border-radius:12px;background:#f5faf5;color:#6e8775;display:grid;gap:6px;font-size:10px;line-height:1.5}.sidebar-shortcuts strong{font-size:11px;color:#3c7953}.sidebar-shortcuts span{white-space:nowrap}.sidebar-shortcuts small{color:#9aaa9d}.sidebar-shortcuts kbd{border:1px solid #d5e4d7;background:#fff;border-radius:4px;padding:2px 4px;color:#4c765a;font-size:10px}
-#practiceView .help-panel{display:block!important;min-height:330px}
+#practiceView .help-panel{display:none!important}
 .sidebar-bottom{display:none!important}
 .update-nav{margin-top:4px;color:#397b55}.update-nav span{font-size:17px}.update-nav:disabled{opacity:.65;cursor:wait}
 @media(max-width:1000px){#practiceView .help-panel{display:none!important}.sidebar-shortcuts{display:none}}
