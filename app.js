@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609181026';
+const DATA_VERSION = '202609181136';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -9,6 +9,8 @@ const SUBJECTS = { psychology: '教育心理学', education: '教育学' };
 const PROFILE_KEY = 'zcq-profiles-v1';
 const ACTIVE_PROFILE_KEY = 'zcq-active-profile-v1';
 let builtIn = [], builtInEducation = [], papers = [], imported = [], questions = [], records = {};
+const ANSWER_OVERRIDE_KEY = 'zcq-answer-overrides-v1';
+let answerOverrides = {};
 let importedBanks = { psychology: [], education: [] };
 let profiles = [], profileId = '', subject = 'psychology', view = 'practice';
 let type = 'single', mode = 'sequential', scope = 'remaining', queue = [], currentId = null, selected = new Set(), answered = false, round = 1, viewed = 0;
@@ -172,8 +174,10 @@ function mergeQuestions(base, local) {
     if (index === undefined) { byId.set(q.id, merged.length); bySignature.set(signature(q), merged.length); merged.push(q); }
     else { merged[index] = q; byId.set(q.id, index); }
   }
-  return merged;
+  return merged.map(q => answerOverrides[q.id] ? { ...q, answer: [...answerOverrides[q.id]] } : q);
 }
+function loadAnswerOverrides() { try { answerOverrides = JSON.parse(localStorage.getItem(ANSWER_OVERRIDE_KEY) || '{}') || {}; } catch { answerOverrides = {}; } }
+function saveAnswerOverride(q, answer) { answerOverrides[q.id] = [...answer]; localStorage.setItem(ANSWER_OVERRIDE_KEY, JSON.stringify(answerOverrides)); }
 function renderStats() {
   const s = stats();
   const setText = (selector, value) => { const el = $(selector); if (el) el.textContent = value; };
@@ -242,7 +246,10 @@ function renderFeedback(q) {
   const tip = details?._tip
     ? `<div class="memory-tip"><strong>✦ 速记技巧</strong><span>${esc(details._tip)}</span></div>`
     : details ? '<p class="tip-unavailable">本题暂无可靠口诀或合适联想，因此不额外编造。</p>' : '';
-  const review = details?._review ? `<p class="ai-review ${details._review.startsWith('建议复核') ? 'needs-review' : ''}"><strong>AI 独立复核：</strong>${esc(details._review)}</p>` : '';
+  const canAdopt = details?._reviewAnswer && q.answer.join(',') !== details._reviewAnswer.join(',');
+  const adopted = details?._reviewAnswer && q.answer.join(',') === details._reviewAnswer.join(',');
+  const adoptButton = canAdopt ? `<button id="adoptAiAnswerBtn" type="button" class="ai-adopt-btn">采用 AI 答案 ${esc(details._reviewAnswer.join('、'))}</button>` : adopted ? '<span class="ai-adopted">已采用 AI 复核答案</span>' : '';
+  const review = details?._review ? `<p class="ai-review ${details._review.startsWith('建议复核') ? 'needs-review' : ''}"><strong>AI 独立复核：</strong>${esc(details._review)} ${adoptButton}</p>` : '';
   let aiHtml = analysis + review + tip;
   if (explanationState?.status === 'loading') aiHtml += `<div class="stream-analysis"><strong>AI 正在逐项解析…</strong>${explanationState.text ? `<div class="stream-text">${esc(explanationState.text)}</div>` : ''}</div>`;
   else if (explanationState?.status === 'error') aiHtml += `<p class="error-message">AI 解析失败：${esc(explanationState.text)} <button id="retryExplainBtn" type="button" class="ai-explain-btn compact">重新尝试</button></p>`;
@@ -288,6 +295,18 @@ function renderCard() {
   $('#openAiSettingsBtn')?.addEventListener('click', () => setView('settings'));
   $('#restoreKnownBtn')?.addEventListener('click', () => classify('unknown'));
   $('#retryAnswerBtn')?.addEventListener('click', () => { selected = new Set(); answered = false; explanationState = null; renderCard(); saveSession(); });
+  $('#adoptAiAnswerBtn')?.addEventListener('click', () => adoptAiAnswer(q, explanationState?.details?._reviewAnswer));
+}
+function adoptAiAnswer(q, answer) {
+  if (!q || !Array.isArray(answer) || !answer.length || answer.some(key => !q.options.some(option => option.key === key))) return;
+  const previous = recordFor(q.id); const wasCorrect = previous.lastCorrect === true;
+  q.answer = [...answer]; saveAnswerOverride(q, answer);
+  if (answered) {
+    const nowCorrect = q.answer.length === selected.size && q.answer.every(key => selected.has(key));
+    records[q.id] = { ...previous, lastCorrect: nowCorrect, wrong: Math.max(0, (previous.wrong || 0) + (wasCorrect === nowCorrect ? 0 : nowCorrect ? -1 : 1)) };
+    saveRecords();
+  }
+  render(); saveSession();
 }
 function renderOverview() {
   const s = stats();
@@ -342,7 +361,7 @@ function submit() {
 async function generateExplanation() {
   const q = currentQuestion(); if (!q || !answered) return;
   const id = currentId, selection = [...selected], requestProfile = profileId, requestSubject = subject;
-  const settings = getSettings(), cacheKey = `${requestProfile}:${settings.baseUrl}:${settings.model}:tip-v5:${q.id}:${selection.join(',')}`;
+  const settings = getSettings(), cacheKey = `${requestProfile}:${settings.baseUrl}:${settings.model}:tip-v6:${q.id}:${selection.join(',')}`;
   if (explanationCache.has(cacheKey)) { explanationState = { status: 'done', details: explanationCache.get(cacheKey) }; renderCard(); return; }
   explanationState = { status: 'loading' }; renderCard();
   try {
@@ -378,6 +397,7 @@ function setView(next) {
   document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.view === next));
 }
 async function switchContext() {
+  loadAnswerOverrides();
   setAiProfile(profileId); fillSettings();
   renderControls();
   const [psychologyBank, educationBank] = await Promise.all([loadBank('psychology'), loadBank('education')]);
@@ -509,7 +529,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-1026';
+    version.textContent = ' · 版本 2026.09.18-1136';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
