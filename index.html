@@ -7,7 +7,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; worker-src 'self' blob:; connect-src 'self' https: http://localhost:* http://127.0.0.1:*; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'none'" />
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <title>高校资格证刷题zcq版</title>
-  <link rel="stylesheet" href="./styles.css?v=202609180925" />
+  <link rel="stylesheet" href="./styles.css?v=202609180930" />
 </head>
 <body>
   <div class="shell">
@@ -31,16 +31,9 @@
       <div class="sidebar-bottom"><div class="mini-note"><span>✓</span><p>每个学习账号、每门科目分别记录进度。</p></div><div class="source-note">题目来源<br /><strong>ZCQ</strong></div></div>
     </aside>
     <main class="main">
-      <header class="topbar"><div class="breadcrumbs">高校资格证刷题zcq版 <span>/</span> <strong id="pageTitle">开始刷题</strong></div><div class="top-right"><span class="live-dot"></span> 进度保存在本机</div></header>
+      <header class="topbar"><div class="breadcrumbs">高校资格证刷题zcq版 <span>/</span> <strong id="pageTitle">开始刷题</strong></div><div class="topbar-hero"><div class="eyebrow">YOUR STUDY SESSION <span></span> <span id="heroSubject">教育心理学</span></div><h1>每天刷一点，<em>知识记得牢。</em></h1><p>答题后看针对性解析，会的划走，不会的留给下一轮。</p></div><div class="top-right"><span class="live-dot"></span> 进度保存在本机</div><div class="topbar-decoration" aria-hidden="true">✓</div></header>
       <div class="content">
         <section class="announcement" aria-label="使用公告"><div class="announcement-icon">公告</div><div><h2>开始前，花半分钟看这里</h2><p>先选学习账号和科目，再选单选、多选或判断。答题后看红绿反馈；“上一题”可撤回误点的已记住，“已刷题回看”可找回做过的题。进度只保存在当前浏览器，不同设备互不干扰，也不会自动同步。</p><p><strong>建议填入自己的 AI Key：</strong>答题后可获得针对具体错选、漏选的解析，还能自动识别新资料并检查重复题。<strong>不填也能直接刷网站已发布的题库、查看标准答案和原有解析。</strong>Key 默认只保存在当前浏览器会话，公共电脑请勿勾选长期保存。</p></div><button id="announcementToggle" class="announcement-toggle">收起公告</button><button id="noticeAiBtn" class="notice-button">配置 AI →</button></section>
-        <section class="hero"><div><div class="eyebrow">YOUR STUDY SESSION <span></span> <span id="heroSubject">教育心理学</span></div><h1>每天刷一点，<em>知识记得牢。</em></h1><p>答题后看针对性解析，会的划走，不会的留给下一轮。</p></div><div class="hero-decoration"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="hero-book">✓</div></div></section>
-        <section class="stats" aria-label="学习统计">
-          <div class="stat"><div class="stat-icon sage">▤</div><div><span>本学科题目</span><strong id="statTotal">—</strong></div></div>
-          <div class="stat"><div class="stat-icon blue">◫</div><div><span>待掌握</span><strong id="statRemaining">—</strong></div></div>
-          <div class="stat"><div class="stat-icon green">✓</div><div><span>已记住</span><strong id="statKnown">—</strong></div></div>
-          <div class="stat"><div class="stat-icon coral">↗</div><div><span>重点复习</span><strong id="statWrong">—</strong></div></div>
-        </section>
         <section id="practiceView" class="workspace">
           <div class="section-heading"><div><div class="eyebrow dark">PRACTICE MODE</div><h2><span id="practiceSubject">教育心理学</span> · 专注练习</h2></div><div class="practice-heading-actions"><div class="keyboard-tip">快捷键 <kbd>1-4</kbd> 选项 · <kbd>←</kbd> 记住 · <kbd>→</kbd> 再练</div><button id="immersiveBtn" class="immersive-btn" type="button">⛶ 沉浸式刷题</button></div></div>
           <div class="type-tabs" role="group" aria-label="题型模块"><button class="active" data-type="single"><span>01</span><strong>单选题</strong><small id="singleCount">—</small></button><button data-type="multiple"><span>02</span><strong>多选题</strong><small id="multipleCount">—</small></button><button data-type="judgment"><span>03</span><strong>判断题</strong><small id="judgmentCount">—</small></button></div>
@@ -59,6 +52,6 @@
   <dialog id="resetDialog"><h3>重置当前账号本学科进度？</h3><p>该账号在当前科目的已记住、错题和作答记录将从本机清除。</p><div><button id="cancelReset">取消</button><button id="confirmReset">确认重置</button></div></dialog>
   <button id="aiAskLauncher" class="ai-ask-launcher" type="button">✦ 提问 AI</button>
   <section id="aiAskWindow" class="ai-ask-window hidden" aria-label="AI 提问窗口"><div id="aiAskDragHandle" class="ask-head"><div><h3>提问 AI</h3><p id="aiAskContext">自由提问，不受题库限制。</p></div><button id="closeAiAsk" type="button" aria-label="关闭提问窗口">×</button></div><div id="aiAskMessages" class="ask-messages" aria-live="polite"><div class="ask-message assistant">你好。你可以自由提问；我会独立判断，不把题库答案当作唯一结论。</div></div><div class="ask-composer"><textarea id="aiAskInput" rows="3" placeholder="输入任何学习、知识或解析问题…"></textarea><label class="ask-reference"><input id="askUseQuestion" type="checkbox" /> 引用当前题目作参考（不传入题库标准答案）</label><div class="ask-actions"><button id="aiAskMic" type="button" class="ask-mic">◉ 语音输入</button><span id="aiAskStatus"></span><button id="askSettingsBtn" type="button" class="ask-settings">AI 设置</button><button id="aiAskSend" type="button" class="primary-btn">发送</button></div></div></section>
-  <script type="module" src="./app.js?v=202609180925"></script>
+  <script type="module" src="./app.js?v=202609180930"></script>
 </body>
 </html>

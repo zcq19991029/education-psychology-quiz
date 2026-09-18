@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609180906';
+const DATA_VERSION = '202609180930';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -171,8 +171,9 @@ function mergeQuestions(base, local) {
 }
 function renderStats() {
   const s = stats();
-  $('#statTotal').textContent = s.total; $('#statRemaining').textContent = s.remaining;
-  $('#statKnown').textContent = s.known; $('#statWrong').textContent = s.wrong; $('#navRemaining').textContent = s.remaining;
+  const setText = (selector, value) => { const el = $(selector); if (el) el.textContent = value; };
+  setText('#statTotal', s.total); setText('#statRemaining', s.remaining);
+  setText('#statKnown', s.known); setText('#statWrong', s.wrong); setText('#navRemaining', s.remaining);
   for (const item of ['single', 'multiple', 'judgment']) $(`#${item}Count`).textContent = `${questions.filter(q => q.type === item).length} 题`;
   const psychologyCount = mergeQuestions(builtIn, importedBanks.psychology).length;
   const educationCount = mergeQuestions(builtInEducation, importedBanks.education).length;
@@ -497,7 +498,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0906';
+    version.textContent = ' · 版本 2026.09.18-0930';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
