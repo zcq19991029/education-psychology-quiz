@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609181341';
+const DATA_VERSION = '202609181345';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -282,6 +282,11 @@ function renderFeedback(q) {
 function renderCard() {
   const card = $('#questionCard'); card.classList.remove('exit-left', 'exit-right');
   const q = currentQuestion();
+  if (q && answerRevealMode && !answered) {
+    selected = new Set(q.answer);
+    answered = true;
+    revealedOnly = true;
+  }
   // 进度与回看范围按当前题型隔离，单选、多选、判断分别累计。
   const moduleQuestions = questions.filter(item => item.type === type);
   const total = moduleQuestions.length;
@@ -567,7 +572,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-1341';
+    version.textContent = ' · 版本 2026.09.18-1345';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
