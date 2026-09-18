@@ -399,6 +399,21 @@ async function confirmImport() {
   $('#importPreview').classList.add('hidden'); importDraft = []; await switchContext(); setView('practice');
 }
 function bind() {
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar && !document.querySelector('.sidebar-shortcuts')) {
+    const shortcuts = document.createElement('div');
+    shortcuts.className = 'sidebar-shortcuts';
+    shortcuts.innerHTML = '<strong>快捷操作</strong><span><kbd>1-4</kbd> 选择选项</span><span><kbd>←</kbd> 已记住　<kbd>→</kbd> 再练</span><small>多选题按 Enter 提交</small>';
+    sidebar.insertBefore(shortcuts, sidebar.querySelector('.sidebar-bottom'));
+  }
+  if (sidebar && !document.querySelector('#updateNav')) {
+    const update = document.createElement('button');
+    update.id = 'updateNav'; update.className = 'nav-item update-nav'; update.type = 'button';
+    update.innerHTML = '<span>↻</span> 检查更新';
+    update.title = '重新获取最新页面，不会清除本机刷题记录';
+    update.onclick = () => { saveSession(); savePrefs(); update.disabled = true; update.querySelector('span').textContent = '…'; location.replace(`${location.pathname}?refresh=${Date.now()}`); };
+    sidebar.insertBefore(update, sidebar.querySelector('.sidebar-bottom'));
+  }
   const versionHost = document.querySelector('.top-right');
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
