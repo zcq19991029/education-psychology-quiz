@@ -209,7 +209,7 @@ function renderCard() {
     return;
   }
   const typeName = q.type === 'multiple' ? '多选题' : q.type === 'judgment' ? '判断题' : '单选题';
-  card.innerHTML = `<div class="card-head"><span class="pill">${typeName} · 第 ${esc(q.number)} 题</span><span class="source-page">题目来源：ZCQ</span></div>
+  card.innerHTML = `<div class="card-head"><span class="pill">${typeName}</span><span class="source-page">题目来源：ZCQ</span></div>
     <h3 class="question-title">${esc(q.stem)}</h3><div class="option-list">${q.options.map(o => renderOption(q, o)).join('')}</div>
     ${q.type === 'multiple' && !answered ? `<div class="submit-row"><button class="submit-btn" id="submitAnswer" ${selected.size ? '' : 'disabled'}>确认答案</button></div>` : ''}
     ${answered ? renderFeedback(q) : ''}${answered && scope === 'reviewed' ? '<button id="retryAnswerBtn" class="retry-answer">重新作答</button>' : ''}`;
@@ -426,6 +426,11 @@ function bind() {
   $('#materialFile').onchange = event => { $('#fileStatus').textContent = event.target.files[0]?.name || '尚未选择文件'; };
   $('#startImportBtn').onclick = startImport;
   $('#noticeAiBtn').onclick = () => setView('settings');
+  const showAnnouncement = () => $('#announcementDialog')?.showModal();
+  $('#announcementNav').onclick = showAnnouncement;
+  $('#closeAnnouncement').onclick = () => { localStorage.setItem('zcq-announcement-seen', '1'); $('#announcementDialog')?.close(); };
+  $('#announcementAi').onclick = () => { localStorage.setItem('zcq-announcement-seen', '1'); $('#announcementDialog')?.close(); setView('settings'); };
+  if (!localStorage.getItem('zcq-announcement-seen')) setTimeout(showAnnouncement, 250);
   const exitImmersive = () => {
     document.body.classList.remove('immersive-mode');
     $('#immersiveBtn').textContent = '⛶ 沉浸式刷题';
@@ -438,6 +443,7 @@ function bind() {
     $('#immersiveBtn').textContent = '× 退出沉浸式';
     try { await document.documentElement.requestFullscreen?.(); } catch { /* 浏览器拒绝全屏时仍保留沉浸布局 */ }
   };
+  $('#immersiveNav').onclick = () => $('#immersiveBtn').click();
   document.addEventListener('fullscreenchange', () => {
     if (!document.fullscreenElement && document.body.classList.contains('immersive-mode')) exitImmersive();
   });

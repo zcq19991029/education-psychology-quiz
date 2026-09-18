@@ -24,6 +24,8 @@
       <button id="papersNav" class="nav-item hidden" data-view="papers"><span>▤</span> 教育学真题卷</button>
       <button class="nav-item" data-view="import"><span>⇧</span> 导入资料</button>
       <button class="nav-item" data-view="settings"><span>✦</span> AI 设置</button>
+      <button id="announcementNav" class="nav-item" type="button"><span>ⓘ</span> 使用公告</button>
+      <button id="immersiveNav" class="nav-item immersive-nav" type="button"><span>⛶</span> 沉浸式刷题</button>
       <div class="sidebar-bottom"><div class="mini-note"><span>✓</span><p>每个学习账号、每门科目分别记录进度。</p></div><div class="source-note">题目来源<br /><strong>ZCQ</strong></div></div>
     </aside>
     <main class="main">
@@ -50,6 +52,7 @@
       </div>
     </main>
   </div>
+  <dialog id="announcementDialog"><h3>使用公告</h3><p>先选学习账号和科目，再选单选、多选或判断。答题后看红绿反馈；上一题可以撤回误点的“我已记住”，已刷题回看可以找回做过的题。进度保存在当前浏览器，不同设备互不干扰，也不会自动同步。</p><p><strong>建议填写自己的 AI Key：</strong>可获得错选、漏选的逐项解析，也能识别新资料并检查重复题。不填写也可以直接刷网站已发布的题库、查看标准答案和已有解析。</p><div><button id="closeAnnouncement">知道了</button><button id="announcementAi">配置 AI</button></div></dialog>
   <dialog id="resetDialog"><h3>重置当前账号本学科进度？</h3><p>该账号在当前科目的已记住、错题和作答记录将从本机清除。</p><div><button id="cancelReset">取消</button><button id="confirmReset">确认重置</button></div></dialog>
   <script type="module" src="./app.js?v=27566a9"></script>
 </body>
