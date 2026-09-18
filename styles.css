@@ -42,6 +42,7 @@ body.immersive-mode{background:#f6f8f5}.immersive-mode .sidebar,.immersive-mode 
 /* 刷题指南移入侧栏后，题卡占满主区域，不保留隐藏面板的空网格列。 */
 #practiceView .practice-grid{grid-template-columns:minmax(0,1fr)!important}
 .question-card{position:relative;cursor:grab}.question-card.is-dragging{transition:none;cursor:grabbing;user-select:none}
+.memory-tip{margin-top:12px;padding:12px 14px;border-radius:10px;background:#fff8e9;border:1px solid #f2dfae;color:#765822;font-size:12px;line-height:1.7}.memory-tip strong{display:block;color:#9b7325;margin-bottom:3px}
 .question-card.swipe-left::after,.question-card.swipe-right::after{position:absolute;top:18px;padding:8px 12px;border-radius:99px;font-size:12px;font-weight:700;pointer-events:none}
 .question-card.swipe-left::after{content:'← 已记住';right:18px;background:#e7f7eb;color:#2f8b57}
 .question-card.swipe-right::after{content:'还不会，再练 →';left:18px;background:#fff3e9;color:#b97843}

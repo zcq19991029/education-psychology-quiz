@@ -180,7 +180,8 @@ function renderFeedback(q) {
     ? explanationState.details : null;
   const analysis = details && q.options.every(o => details[o.key])
     ? `<div class="option-analysis"><strong>逐项解析</strong>${q.options.map(o => `<div class="analysis-row ${q.answer.includes(o.key) ? 'is-correct' : 'is-wrong'}"><b>${esc(o.key)}</b><span>${esc(details[o.key])}</span></div>`).join('')}</div>` : '';
-  let aiHtml = analysis;
+  const tip = details?._tip ? `<div class="memory-tip"><strong>✦ 速记技巧</strong><span>${esc(details._tip)}</span></div>` : '';
+  let aiHtml = analysis + tip;
   if (explanationState?.status === 'loading') aiHtml += `<div class="stream-analysis"><strong>AI 正在逐项解析…</strong>${explanationState.text ? `<div class="stream-text">${esc(explanationState.text)}</div>` : ''}</div>`;
   else if (explanationState?.status === 'error') aiHtml += `<p class="error-message">AI 解析失败：${esc(explanationState.text)} <button id="retryExplainBtn" type="button" class="text-btn">重试</button></p>`;
   else if (!analysis && !getSettings().apiKey) aiHtml = '<p class="ai-message">想看四个选项各自的原因？<button id="openAiSettingsBtn" class="text-btn">设置 AI Key</button></p>';
@@ -427,7 +428,7 @@ function bind() {
     version.className = 'app-version';
     version.textContent = ' · 版本 2026.09.18-0703';
     versionHost.appendChild(version);
-    version.textContent = ' · 版本 2026.09.18-0710';
+    version.textContent = ' · 版本 2026.09.18-0712';
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
   $('#addProfileBtn').onclick = async () => {
