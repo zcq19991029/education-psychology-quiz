@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609181242';
+const DATA_VERSION = '202609181255';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -176,7 +176,24 @@ function mergeQuestions(base, local) {
   }
   return merged.map(q => answerOverrides[q.id] ? { ...q, answer: [...answerOverrides[q.id]] } : q);
 }
-function loadAnswerOverrides() { try { answerOverrides = JSON.parse(localStorage.getItem(ANSWER_OVERRIDE_KEY) || '{}') || {}; } catch { answerOverrides = {}; } }
+const PUBLIC_CONFIRMED_CORRECTIONS = {
+  'education-single-20': { from: ['C'], to: ['B'] },
+  'education-single-47': { from: ['C'], to: ['B'] },
+  'education-single-67': { from: ['D'], to: ['B'] },
+  'education-single-75': { from: ['C'], to: ['B'] },
+  'education-single-158': { from: ['D'], to: ['B'] },
+  'education-single-213': { from: ['A'], to: ['C'] }
+};
+function loadAnswerOverrides() {
+  try { answerOverrides = JSON.parse(localStorage.getItem(ANSWER_OVERRIDE_KEY) || '{}') || {}; } catch { answerOverrides = {}; }
+  let changed = false;
+  for (const [id, correction] of Object.entries(PUBLIC_CONFIRMED_CORRECTIONS)) {
+    if (JSON.stringify(answerOverrides[id]) === JSON.stringify(correction.from)) {
+      delete answerOverrides[id]; changed = true;
+    }
+  }
+  if (changed) localStorage.setItem(ANSWER_OVERRIDE_KEY, JSON.stringify(answerOverrides));
+}
 function saveAnswerOverride(q, answer) { answerOverrides[q.id] = [...answer]; localStorage.setItem(ANSWER_OVERRIDE_KEY, JSON.stringify(answerOverrides)); }
 function renderStats() {
   const s = stats();
@@ -531,7 +548,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-1242';
+    version.textContent = ' · 版本 2026.09.18-1255';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
