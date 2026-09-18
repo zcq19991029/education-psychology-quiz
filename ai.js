@@ -68,6 +68,7 @@ export async function chat(messages, { json = false } = {}) {
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${settings.apiKey}` },
     body: JSON.stringify({ model: settings.model.trim(), messages, temperature: 0.2,
       ...(settings.provider === 'deepseek' ? { thinking: { type: 'disabled' } } : {}),
+      ...(settings.provider === 'siliconflow' ? { enable_thinking: false } : {}),
       ...(json ? { response_format: { type: 'json_object' } } : {}) })
   }, 25000);
   let data;
@@ -99,7 +100,8 @@ export async function streamChat(messages, onProgress) {
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${settings.apiKey}` },
     body: JSON.stringify({ model: settings.model.trim(), messages, temperature: 0.2,
       max_tokens: 800, stream: true,
-      ...(settings.provider === 'deepseek' ? { thinking: { type: 'disabled' } } : {}) })
+      ...(settings.provider === 'deepseek' ? { thinking: { type: 'disabled' } } : {}),
+      ...(settings.provider === 'siliconflow' ? { enable_thinking: false } : {}) })
   }, 45000);
   if (!response.ok) {
     let message = `接口请求失败（HTTP ${response.status}）。`;

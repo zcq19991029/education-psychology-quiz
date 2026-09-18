@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609180835';
+const DATA_VERSION = '202609180839';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -186,18 +186,23 @@ async function sendAskMessage() {
   if (!question) return;
   if (!getSettings().apiKey) { $('#aiAskStatus').textContent = '请先配置 AI Key。'; return; }
   input.value = ''; appendAskMessage('user', question);
-  const answer = appendAskMessage('assistant', 'AI 正在回答…', true);
+  const answer = appendAskMessage('assistant', '正在连接模型…', true);
   const send = $('#aiAskSend'); send.disabled = true; $('#aiAskMic').disabled = true;
+  let receivedText = false;
+  const startedAt = Date.now();
+  const ticker = setInterval(() => {
+    if (!receivedText) answer.textContent = `正在连接模型并生成回答… 已等待 ${Math.max(1, Math.floor((Date.now() - startedAt) / 1000))} 秒`;
+  }, 700);
   const system = `你是高校教师资格证刷题网站的答疑老师。基于提供的当前题目上下文回答用户问题；解释要准确、简洁、中文表达自然。题目未作答时，不要主动给出正确答案。无法确定时明确说明。\n\n${askContext()}`;
   try {
     const messages = [{ role: 'system', content: system }, ...askHistory, { role: 'user', content: question }];
-    const text = await streamChat(messages, partial => { answer.textContent = partial; $('#aiAskMessages').scrollTop = $('#aiAskMessages').scrollHeight; });
+    const text = await streamChat(messages, partial => { if (partial) { receivedText = true; answer.textContent = partial; $('#aiAskMessages').scrollTop = $('#aiAskMessages').scrollHeight; } });
     answer.textContent = text; answer.classList.remove('pending');
     askHistory = [...askHistory, { role: 'user', content: question }, { role: 'assistant', content: text }].slice(-8);
     $('#aiAskStatus').textContent = `由 ${getSettings().model} 回答`;
   } catch (error) {
     answer.textContent = `回答失败：${aiErrorMessage(error)}`; answer.classList.remove('pending'); answer.classList.add('error');
-  } finally { send.disabled = false; $('#aiAskMic').disabled = false; }
+  } finally { clearInterval(ticker); send.disabled = false; $('#aiAskMic').disabled = false; }
 }
 function answerText(q) { return q.type === 'judgment' ? (q.answer[0] === 'T' ? '正确' : '错误') : q.answer.join('、'); }
 function optionLabel(q, key) { const item = q.options.find(o => o.key === key); return item ? `${key}「${item.text}」` : key; }
@@ -461,7 +466,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0835';
+    version.textContent = ' · 版本 2026.09.18-0839';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
