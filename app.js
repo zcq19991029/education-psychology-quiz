@@ -282,6 +282,12 @@ function classify(status) {
   transitionTimer = setTimeout(() => { history.push(previous); records[id] = { ...recordFor(id), status }; saveRecords(); viewed++; transitioning = false; transitionTimer = null; nextCard(); }, 170);
 }
 function setView(next) {
+  if (next !== 'practice' && document.body.classList.contains('immersive-mode')) {
+    document.body.classList.remove('immersive-mode');
+    document.querySelector('.help-panel')?.style.removeProperty('display');
+    $('#immersiveBtn').textContent = '⛶ 沉浸式刷题';
+    if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+  }
   view = next;
   for (const name of ['practice', 'overview', 'papers', 'import', 'settings']) $(`#${name}View`).classList.toggle('hidden', name !== next);
   $('#pageTitle').textContent = ({ practice: '开始刷题', overview: '学习概览', papers: '教育学真题卷', import: '导入资料', settings: 'AI 设置' })[next];
@@ -421,7 +427,7 @@ function bind() {
     version.className = 'app-version';
     version.textContent = ' · 版本 2026.09.18-0703';
     versionHost.appendChild(version);
-    version.textContent = ' · 版本 2026.09.18-0707';
+    version.textContent = ' · 版本 2026.09.18-0708';
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
   $('#addProfileBtn').onclick = async () => {
@@ -444,6 +450,12 @@ function bind() {
   $('#customModelInput').onchange = persistSettings;
   $('#baseUrlInput').onchange = persistSettings;
   $('#saveAiBtn').onclick = persistSettings;
+  if (!$('#backToPracticeBtn')) {
+    const back = document.createElement('button');
+    back.id = 'backToPracticeBtn'; back.type = 'button'; back.className = 'subtle-btn'; back.textContent = '返回刷题';
+    $('#clearAiKeyBtn').after(back);
+  }
+  $('#backToPracticeBtn').onclick = () => setView('practice');
   $('#clearAiKeyBtn').onclick = () => { $('#apiKeyInput').value = ''; persistSettings(); $('#aiStatus').textContent = '本账号的 Key 已清除'; };
   $('#testAiBtn').onclick = async () => { persistSettings(); const s = getSettings(); $('#aiStatus').textContent = `正在测试 ${providers[s.provider].label} / ${s.model}…`; try { await chat([{ role: 'user', content: '只回答：连接成功' }]); $('#aiStatus').textContent = `${s.model} 连接成功`; } catch (error) { $('#aiStatus').textContent = `${s.model} 连接失败：${aiErrorMessage(error)}`; } };
   $('#refreshModelsBtn').onclick = async () => { persistSettings(); $('#aiStatus').textContent = '正在读取模型…'; try { const models = await listModels(); $('#modelSelect').innerHTML = '<option value="">手动输入模型 ID</option>' + models.map(model => `<option value="${esc(model)}">${esc(model)}</option>`).join(''); $('#aiStatus').textContent = `读取到 ${models.length} 个模型`; } catch (error) { $('#aiStatus').textContent = error.message; } };
