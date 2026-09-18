@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609181345';
+const DATA_VERSION = '202609181358';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -13,6 +13,7 @@ const ANSWER_OVERRIDE_KEY = 'zcq-answer-overrides-v1';
 let answerOverrides = {};
 let revealedOnly = false;
 let answerRevealMode = false;
+let answerRevealSeen = new Set();
 let importedBanks = { psychology: [], education: [] };
 let profiles = [], profileId = '', subject = 'psychology', view = 'practice';
 let type = 'single', mode = 'sequential', scope = 'remaining', queue = [], currentId = null, selected = new Set(), answered = false, round = 1, viewed = 0;
@@ -287,6 +288,7 @@ function renderCard() {
     answered = true;
     revealedOnly = true;
   }
+  if (q && answerRevealMode) answerRevealSeen.add(q.id);
   // 进度与回看范围按当前题型隔离，单选、多选、判断分别累计。
   const moduleQuestions = questions.filter(item => item.type === type);
   const total = moduleQuestions.length;
@@ -297,6 +299,11 @@ function renderCard() {
   $('#sessionText').textContent = `本题型已刷 ${practiced} / ${total} 题 · 未刷 ${unseen} 题 · 待掌握 ${remaining} 题`;
   $('#progressFill').style.width = `${Math.round(practiced / Math.max(1, total) * 100)}%`;
   $('#knownBtn').disabled = !q || !answered; $('#unknownBtn').disabled = !q || !answered;
+  if (answerRevealMode) {
+    $('#sessionText').textContent = `速通查看 ${answerRevealSeen.size} / ${total} 题 · 不计入作答记录`;
+    $('#progressFill').style.width = `${Math.round(answerRevealSeen.size / Math.max(1, total) * 100)}%`;
+    $('#knownBtn').disabled = true; $('#unknownBtn').disabled = true;
+  }
   $('#prevBtn').disabled = !history.length;
   $('#nextBtn').disabled = !q;
   if (!q) {
@@ -308,7 +315,7 @@ function renderCard() {
   card.innerHTML = `<div class="card-head"><span class="pill">${typeName}</span><span class="source-page">题目来源：ZCQ</span></div>
     <h3 class="question-title">${esc(q.stem)}</h3><div class="option-list">${q.options.map(o => renderOption(q, o)).join('')}</div>
     ${q.type === 'multiple' && !answered ? `<div class="submit-row"><button class="submit-btn" id="submitAnswer" ${selected.size ? '' : 'disabled'}>确认答案</button></div>` : ''}
-    ${answered ? renderFeedback(q) : ''}${answered && scope === 'reviewed' ? '<button id="retryAnswerBtn" class="retry-answer">重新作答</button>' : ''}${answered && scope === 'known' ? '<button id="restoreKnownBtn" class="retry-answer">移回待掌握，重新刷</button>' : ''}<button id="showAnswerBtn" class="immersive-answer-sheet-btn" type="button">${answerRevealMode ? '关闭答案显示' : '一键显示答案'}</button>`;
+    ${answered && !revealedOnly ? renderFeedback(q) : ''}${answered && !revealedOnly && scope === 'reviewed' ? '<button id="retryAnswerBtn" class="retry-answer">重新作答</button>' : ''}${answered && !revealedOnly && scope === 'known' ? '<button id="restoreKnownBtn" class="retry-answer">移回待掌握，重新刷</button>' : ''}<button id="showAnswerBtn" class="immersive-answer-sheet-btn" type="button">${answerRevealMode ? '关闭答案显示' : '一键显示答案'}</button>`;
   card.querySelectorAll('[data-option]').forEach(button => {
     let timer = null, longPressed = false;
     button.onclick = () => { if (longPressed) { longPressed = false; return; } choose(button.dataset.option); };
@@ -316,7 +323,7 @@ function renderCard() {
     ['pointerup', 'pointerleave', 'pointercancel'].forEach(name => button.addEventListener(name, () => { clearTimeout(timer); timer = null; }));
   });
   $('#submitAnswer')?.addEventListener('click', submit);
-  $('#showAnswerBtn')?.addEventListener('click', () => { answerRevealMode = !answerRevealMode; if (answerRevealMode) { selected = new Set(q.answer); answered = true; revealedOnly = true; } else { selected = new Set(); answered = false; revealedOnly = false; explanationState = null; } renderCard(); });
+  $('#showAnswerBtn')?.addEventListener('click', () => { answerRevealMode = !answerRevealMode; if (answerRevealMode) { answerRevealSeen = new Set(); selected = new Set(q.answer); answered = true; revealedOnly = true; } else { answerRevealSeen = new Set(); selected = new Set(); answered = false; revealedOnly = false; explanationState = null; } renderCard(); });
   $('#openAiSettingsBtn')?.addEventListener('click', () => setView('settings'));
   $('#restoreKnownBtn')?.addEventListener('click', () => classify('unknown'));
   $('#retryAnswerBtn')?.addEventListener('click', () => { selected = new Set(); answered = false; explanationState = null; renderCard(); saveSession(); });
@@ -572,7 +579,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-1345';
+    version.textContent = ' · 版本 2026.09.18-1358';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
