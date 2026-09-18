@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609180847';
+const DATA_VERSION = '202609180850';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -182,9 +182,9 @@ function renderStats() {
 function currentQuestion() { return questions.find(q => q.id === currentId); }
 function askContext() {
   const q = currentQuestion();
-  if (!q) return `当前科目：${SUBJECTS[subject]}。用户正在使用刷题网站，可回答学习方法或网站使用问题。`;
+  if (!q) return '';
   const choices = q.options.map(item => `${item.key}. ${item.text}`).join('\n');
-  return `当前科目：${SUBJECTS[subject]}\n当前题目：${q.stem}\n选项：\n${choices}\n${answered ? `标准答案：${q.answer.join('、')}\n用户作答：${[...selected].join('、')}` : '用户尚未作答，请避免主动泄露正确答案。'}`;
+  return `仅供参考的当前题目：\n科目：${SUBJECTS[subject]}\n题干：${q.stem}\n选项：\n${choices}`;
 }
 function appendAskMessage(role, text, pending = false) {
   const list = $('#aiAskMessages');
@@ -206,7 +206,8 @@ async function sendAskMessage() {
   const ticker = setInterval(() => {
     if (!receivedText) answer.textContent = `正在连接模型并生成回答… 已等待 ${Math.max(1, Math.floor((Date.now() - startedAt) / 1000))} 秒`;
   }, 700);
-  const system = `你是高校教师资格证刷题网站的答疑老师。基于提供的当前题目上下文回答用户问题；解释要准确、简洁、中文表达自然。题目未作答时，不要主动给出正确答案。无法确定时明确说明。\n\n${askContext()}`;
+  const reference = $('#askUseQuestion').checked ? `\n\n${askContext()}` : '';
+  const system = `你是中立、客观的教育与学习答疑助手。用户可以自由提问，不必围绕题目回答，也不要把对话强行拉回刷题。题库、题库解析和所谓标准答案都可能有误、存在版本差异或争议，不能把它们当作权威结论；请独立判断并说明依据、前提或不确定性。若问题本身存在多种学术或考试口径，应明确区分。回答准确、简洁、中文表达自然；不知道时如实说明。${reference}`;
   try {
     const messages = [{ role: 'system', content: system }, ...askHistory, { role: 'user', content: question }];
     const text = await streamChat(messages, partial => { if (partial) { receivedText = true; answer.textContent = partial; $('#aiAskMessages').scrollTop = $('#aiAskMessages').scrollHeight; } });
@@ -495,7 +496,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0847';
+    version.textContent = ' · 版本 2026.09.18-0850';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
@@ -533,7 +534,7 @@ function bind() {
   $('#noticeAiBtn').onclick = () => setView('settings');
   const askWindow = $('#aiAskWindow');
   $('#aiAskLauncher').onclick = () => {
-    $('#aiAskContext').textContent = currentQuestion() ? '已带入当前题目，可直接追问解析细节。' : '可提问学习方法或网站使用问题。';
+    $('#aiAskContext').textContent = currentQuestion() ? '自由提问；如需讨论当前题目，请勾选下方引用。' : '自由提问，不受题库限制。';
     askWindow.classList.remove('hidden'); $('#aiAskInput').focus();
   };
   $('#closeAiAsk').onclick = () => { activeSpeechRecognition?.stop(); askWindow.classList.add('hidden'); };
