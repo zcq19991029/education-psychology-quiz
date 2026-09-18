@@ -77,7 +77,7 @@
       }
     ],
     "answer": [
-      "A"
+      "B"
     ],
     "sourcePage": 1,
     "id": "single-3",
@@ -2233,8 +2233,9 @@
       }
     ],
     "answer": [
-      "A"
+      "B"
     ],
+    "explanation": "《中庸》提出“喜怒哀乐之未发，谓之中；发而皆中节，谓之和”，以中和描述人的心性和情感状态。",
     "sourcePage": 12,
     "id": "single-80",
     "type": "single"
