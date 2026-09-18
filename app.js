@@ -1,7 +1,7 @@
-import { providers, getSettings, saveSettings, setAiProfile, chat, listModels, explainQuestion } from './ai.js';
+import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609180820';
+const DATA_VERSION = '202609180828';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -16,6 +16,7 @@ let transitioning = false, transitionTimer = null, importDraft = [], draftSubjec
 let duplicateDecisions = new Map();
 let history = [], forward = [];
 const explanationCache = new Map();
+let askHistory = [];
 
 function recordKey() { return `zcq-progress-v2:${profileId}:${subject}`; }
 function prefsKey() { return `zcq-prefs-v1:${profileId}`; }
@@ -166,6 +167,38 @@ function renderStats() {
   $('#educationBankCount').textContent = educationCount ? `${educationCount} 题` : '待导入';
 }
 function currentQuestion() { return questions.find(q => q.id === currentId); }
+function askContext() {
+  const q = currentQuestion();
+  if (!q) return `当前科目：${SUBJECTS[subject]}。用户正在使用刷题网站，可回答学习方法或网站使用问题。`;
+  const choices = q.options.map(item => `${item.key}. ${item.text}`).join('\n');
+  return `当前科目：${SUBJECTS[subject]}\n当前题目：${q.stem}\n选项：\n${choices}\n${answered ? `标准答案：${q.answer.join('、')}\n用户作答：${[...selected].join('、')}` : '用户尚未作答，请避免主动泄露正确答案。'}`;
+}
+function appendAskMessage(role, text, pending = false) {
+  const list = $('#aiAskMessages');
+  const item = document.createElement('div');
+  item.className = `ask-message ${role}${pending ? ' pending' : ''}`;
+  item.textContent = text;
+  list.appendChild(item); list.scrollTop = list.scrollHeight;
+  return item;
+}
+async function sendAskMessage() {
+  const input = $('#aiAskInput'), question = input.value.trim();
+  if (!question) return;
+  if (!getSettings().apiKey) { $('#aiAskStatus').textContent = '请先配置 AI Key。'; return; }
+  input.value = ''; appendAskMessage('user', question);
+  const answer = appendAskMessage('assistant', 'AI 正在回答…', true);
+  const send = $('#aiAskSend'); send.disabled = true; $('#aiAskMic').disabled = true;
+  const system = `你是高校教师资格证刷题网站的答疑老师。基于提供的当前题目上下文回答用户问题；解释要准确、简洁、中文表达自然。题目未作答时，不要主动给出正确答案。无法确定时明确说明。\n\n${askContext()}`;
+  try {
+    const messages = [{ role: 'system', content: system }, ...askHistory, { role: 'user', content: question }];
+    const text = await streamChat(messages, partial => { answer.textContent = partial; $('#aiAskMessages').scrollTop = $('#aiAskMessages').scrollHeight; });
+    answer.textContent = text; answer.classList.remove('pending');
+    askHistory = [...askHistory, { role: 'user', content: question }, { role: 'assistant', content: text }].slice(-8);
+    $('#aiAskStatus').textContent = `由 ${getSettings().model} 回答`;
+  } catch (error) {
+    answer.textContent = `回答失败：${aiErrorMessage(error)}`; answer.classList.remove('pending'); answer.classList.add('error');
+  } finally { send.disabled = false; $('#aiAskMic').disabled = false; }
+}
 function answerText(q) { return q.type === 'judgment' ? (q.answer[0] === 'T' ? '正确' : '错误') : q.answer.join('、'); }
 function optionLabel(q, key) { const item = q.options.find(o => o.key === key); return item ? `${key}「${item.text}」` : key; }
 function renderOption(q, o) {
@@ -428,7 +461,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0820';
+    version.textContent = ' · 版本 2026.09.18-0828';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
@@ -464,6 +497,41 @@ function bind() {
   $('#materialFile').onchange = event => { $('#fileStatus').textContent = event.target.files[0]?.name || '尚未选择文件'; };
   $('#startImportBtn').onclick = startImport;
   $('#noticeAiBtn').onclick = () => setView('settings');
+  const askWindow = $('#aiAskWindow');
+  $('#aiAskLauncher').onclick = () => {
+    $('#aiAskContext').textContent = currentQuestion() ? '已带入当前题目，可直接追问解析细节。' : '可提问学习方法或网站使用问题。';
+    askWindow.classList.remove('hidden'); $('#aiAskInput').focus();
+  };
+  $('#closeAiAsk').onclick = () => askWindow.classList.add('hidden');
+  $('#askSettingsBtn').onclick = () => { askWindow.classList.add('hidden'); setView('settings'); };
+  $('#aiAskSend').onclick = sendAskMessage;
+  $('#aiAskInput').addEventListener('keydown', event => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendAskMessage(); } });
+  $('#aiAskMic').onclick = () => {
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!Recognition) { $('#aiAskStatus').textContent = '当前浏览器不支持语音输入，请使用文字输入。'; return; }
+    const recognition = new Recognition(); recognition.lang = 'zh-CN'; recognition.interimResults = true; recognition.continuous = false;
+    recognition.onstart = () => { $('#aiAskStatus').textContent = '正在聆听，请说话…'; $('#aiAskMic').classList.add('recording'); };
+    recognition.onresult = event => { $('#aiAskInput').value = [...event.results].map(result => result[0].transcript).join(''); };
+    recognition.onerror = event => { $('#aiAskStatus').textContent = event.error === 'not-allowed' ? '未获麦克风权限，请允许后重试。' : '语音识别失败，请改用文字输入。'; };
+    recognition.onend = () => { $('#aiAskMic').classList.remove('recording'); if (!$('#aiAskStatus').textContent.includes('失败')) $('#aiAskStatus').textContent = '语音已转为文字，可编辑后发送。'; };
+    try { recognition.start(); } catch { $('#aiAskStatus').textContent = '语音识别正在启动，请稍后重试。'; }
+  };
+  let askDrag = null;
+  $('#aiAskDragHandle').addEventListener('pointerdown', event => {
+    if (event.target.closest('button')) return;
+    const rect = askWindow.getBoundingClientRect();
+    askDrag = { x: event.clientX, y: event.clientY, left: rect.left, top: rect.top };
+    $('#aiAskDragHandle').setPointerCapture?.(event.pointerId);
+  });
+  $('#aiAskDragHandle').addEventListener('pointermove', event => {
+    if (!askDrag) return;
+    const rect = askWindow.getBoundingClientRect();
+    const left = Math.max(8, Math.min(window.innerWidth - rect.width - 8, askDrag.left + event.clientX - askDrag.x));
+    const top = Math.max(8, Math.min(window.innerHeight - rect.height - 8, askDrag.top + event.clientY - askDrag.y));
+    askWindow.style.left = `${left}px`; askWindow.style.top = `${top}px`; askWindow.style.right = 'auto'; askWindow.style.bottom = 'auto';
+  });
+  const endAskDrag = () => { askDrag = null; };
+  $('#aiAskDragHandle').addEventListener('pointerup', endAskDrag); $('#aiAskDragHandle').addEventListener('pointercancel', endAskDrag);
   const showAnnouncement = () => $('#announcementDialog')?.showModal();
   $('#announcementNav').onclick = showAnnouncement;
   $('#closeAnnouncement').onclick = () => { localStorage.setItem('zcq-announcement-seen', '1'); $('#announcementDialog')?.close(); };

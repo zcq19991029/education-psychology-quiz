@@ -90,7 +90,7 @@ export async function listModels() {
   return (data.data || []).map(item => item.id).filter(Boolean).sort();
 }
 
-async function streamChat(messages, onProgress) {
+export async function streamChat(messages, onProgress) {
   const settings = getSettings();
   if (!settings.apiKey) throw new Error('请先在 AI 设置中填写 API Key。');
   if (!settings.model.trim()) throw new Error('请先选择或填写模型名称。');
