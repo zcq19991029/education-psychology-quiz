@@ -190,13 +190,15 @@ function renderFeedback(q) {
 function renderCard() {
   const card = $('#questionCard'); card.classList.remove('exit-left', 'exit-right');
   const q = currentQuestion();
-  const moduleQuestions = questions.filter(item => item.type === type);
+  // 进度是当前科目级别的历史累计，不随单选/多选/判断切换清零。
+  // 出题队列仍按当前题型筛选，但顶部统计回答过的题覆盖本学科全部题型。
+  const moduleQuestions = questions;
   const total = moduleQuestions.length;
   const practiced = moduleQuestions.filter(item => recordFor(item.id).attempts > 0).length;
   const unseen = total - practiced;
   const remaining = moduleQuestions.filter(item => recordFor(item.id).status !== 'known').length;
   $('#modeText').textContent = `${mode === 'random' ? '随机' : '顺序'}练习 · 第 ${round} 轮`;
-  $('#sessionText').textContent = `本模块已刷 ${practiced} / ${total} 题 · 未刷 ${unseen} 题 · 待掌握 ${remaining} 题`;
+  $('#sessionText').textContent = `本学科历史已刷 ${practiced} / ${total} 题 · 未刷 ${unseen} 题 · 待掌握 ${remaining} 题`;
   $('#progressFill').style.width = `${Math.round(practiced / Math.max(1, total) * 100)}%`;
   $('#knownBtn').disabled = !q || !answered; $('#unknownBtn').disabled = !q || !answered;
   $('#prevBtn').disabled = !history.length;
