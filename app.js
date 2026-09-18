@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609180853';
+const DATA_VERSION = '202609180858';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -16,7 +16,7 @@ let transitioning = false, transitionTimer = null, importDraft = [], draftSubjec
 let duplicateDecisions = new Map();
 let history = [], forward = [];
 const explanationCache = new Map();
-let askHistory = [], activeSpeechRecognition = null;
+let askHistory = [], activeSpeechRecognition = null, speechKeepListening = false;
 
 function recordKey() { return `zcq-progress-v2:${profileId}:${subject}`; }
 function prefsKey() { return `zcq-prefs-v1:${profileId}`; }
@@ -496,7 +496,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0853';
+    version.textContent = ' · 版本 2026.09.18-0858';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
@@ -537,20 +537,40 @@ function bind() {
     $('#aiAskContext').textContent = currentQuestion() ? '自由提问；如需讨论当前题目，请勾选下方引用。' : '自由提问，不受题库限制。';
     askWindow.classList.remove('hidden'); $('#aiAskInput').focus();
   };
-  $('#closeAiAsk').onclick = () => { activeSpeechRecognition?.stop(); askWindow.classList.add('hidden'); };
-  $('#askSettingsBtn').onclick = () => { askWindow.classList.add('hidden'); setView('settings'); };
+  $('#closeAiAsk').onclick = () => { speechKeepListening = false; activeSpeechRecognition?.stop(); askWindow.classList.add('hidden'); };
+  $('#askSettingsBtn').onclick = () => { speechKeepListening = false; activeSpeechRecognition?.stop(); askWindow.classList.add('hidden'); setView('settings'); };
   $('#aiAskSend').onclick = sendAskMessage;
   $('#aiAskInput').addEventListener('keydown', event => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendAskMessage(); } });
   $('#aiAskMic').onclick = () => {
-    if (activeSpeechRecognition) { activeSpeechRecognition.stop(); return; }
+    if (activeSpeechRecognition) { speechKeepListening = false; activeSpeechRecognition.stop(); return; }
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!Recognition) { $('#aiAskStatus').textContent = '当前浏览器不支持语音输入，请使用文字输入。'; return; }
-    const recognition = activeSpeechRecognition = new Recognition(); recognition.lang = 'zh-CN'; recognition.interimResults = true; recognition.continuous = false;
+    const baseText = $('#aiAskInput').value.trim(); let finalText = '';
+    speechKeepListening = true;
+    const recognition = activeSpeechRecognition = new Recognition(); recognition.lang = 'zh-CN'; recognition.interimResults = true; recognition.continuous = true;
     recognition.onstart = () => { $('#aiAskStatus').textContent = '正在聆听，再次点击可停止。'; $('#aiAskMic').classList.add('recording'); $('#aiAskMic').textContent = '■ 停止录音'; };
-    recognition.onresult = event => { $('#aiAskInput').value = [...event.results].map(result => result[0].transcript).join(''); };
-    recognition.onerror = event => { $('#aiAskStatus').textContent = event.error === 'not-allowed' ? '未获麦克风权限，请允许后重试。' : '语音识别失败，请改用文字输入。'; };
-    recognition.onend = () => { activeSpeechRecognition = null; $('#aiAskMic').classList.remove('recording'); $('#aiAskMic').textContent = '◉ 语音输入'; if (!$('#aiAskStatus').textContent.includes('失败')) $('#aiAskStatus').textContent = '语音已停止，文字可编辑后发送。'; };
-    try { recognition.start(); } catch { activeSpeechRecognition = null; $('#aiAskStatus').textContent = '语音识别正在启动，请稍后重试。'; }
+    recognition.onresult = event => {
+      let interimText = '';
+      for (let index = event.resultIndex; index < event.results.length; index++) {
+        const text = event.results[index][0].transcript;
+        if (event.results[index].isFinal) finalText += text; else interimText += text;
+      }
+      $('#aiAskInput').value = [baseText, finalText + interimText].filter(Boolean).join(baseText && (finalText || interimText) ? ' ' : '');
+    };
+    recognition.onerror = event => {
+      if (['not-allowed', 'service-not-allowed'].includes(event.error)) { speechKeepListening = false; $('#aiAskStatus').textContent = '未获麦克风权限，请允许后重试。'; }
+      else if (event.error !== 'no-speech') $('#aiAskStatus').textContent = '识别暂时中断，正在续听…';
+    };
+    recognition.onend = () => {
+      if (speechKeepListening) {
+        $('#aiAskStatus').textContent = '短暂停顿，正在继续聆听…';
+        setTimeout(() => { if (speechKeepListening && activeSpeechRecognition === recognition) try { recognition.start(); } catch { speechKeepListening = false; recognition.onend(); } }, 180);
+        return;
+      }
+      activeSpeechRecognition = null; $('#aiAskMic').classList.remove('recording'); $('#aiAskMic').textContent = '◉ 语音输入';
+      if (!$('#aiAskStatus').textContent.includes('权限')) $('#aiAskStatus').textContent = '语音已停止，文字可编辑后发送。';
+    };
+    try { recognition.start(); } catch { speechKeepListening = false; activeSpeechRecognition = null; $('#aiAskStatus').textContent = '语音识别正在启动，请稍后重试。'; }
   };
   let askDrag = null;
   $('#aiAskDragHandle').addEventListener('pointerdown', event => {
