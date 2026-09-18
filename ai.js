@@ -127,12 +127,21 @@ export async function explainQuestion(question, selection, onProgress) {
   const keys = question.options.map(item => item.key);
   const prompt = `请针对这道教育类考试题逐项解析。每项解释它为何符合或不符合题意，联系具体知识点；不能只重复答案。否定式题干要说明判别标准；没有依据时如实说明。每项 25-60 字。严格按选项顺序逐行输出，格式为“A: 解析”。所有选项结束后另起一行输出“速记技巧: 一句准确、可背诵的口诀或记忆关联（15-40字）”。口诀必须对应本题知识点；没有可靠口诀时，写“速记技巧: 抓住题干中的……”，不可编造出处。不要 Markdown、不要开头结尾。\n题型：${question.type}\n题干：${question.stem}\n选项：\n${options}\n标准答案：${question.answer.join(',')}\n学生选择：${selection.join(',')}`;
   const raw = await streamChat([{ role: 'system', content: '你是审慎的高校教师资格证备考辅导老师。按题目选项顺序逐行输出具体原因，并补充一条准确的速记技巧。' }, { role: 'user', content: prompt }], onProgress);
+  const ensureTip = async tip => {
+    if (tip) return tip;
+    try {
+      const extra = await chat([{ role: 'user', content: `只为以下教育类试题写一句15-40字的速记口诀或关键词记忆法。必须贴合知识点，不要解释、不要 Markdown，不要编造出处。题干：${question.stem}\n正确答案：${question.answer.join('、')}` }]);
+      return extra.replace(/^\s*(?:速记技巧|记忆技巧|口诀)\s*[：:]\s*/i, '').trim();
+    } catch {
+      return `记住题干关键词，再对应正确项 ${question.answer.join('、')}。`;
+    }
+  };
   let parsed;
   try { parsed = JSON.parse(raw.replace(/^\x60\x60\x60(?:json)?\s*/i, '').replace(/\x60\x60\x60\s*$/, '')); } catch { /* try line parsing below */ }
   const source = parsed?.options || parsed;
   const parsedTip = typeof parsed?.tip === 'string' ? parsed.tip.trim() : typeof parsed?.['速记技巧'] === 'string' ? parsed['速记技巧'].trim() : '';
   if (source && keys.every(key => typeof source[key] === 'string' && source[key].trim())) {
-    return { ...Object.fromEntries(keys.map(key => [key, source[key].trim()])), _tip: parsedTip };
+    return { ...Object.fromEntries(keys.map(key => [key, source[key].trim()])), _tip: await ensureTip(parsedTip) };
   }
   const lines = {};
   let tip = '';
@@ -142,6 +151,6 @@ export async function explainQuestion(question, selection, onProgress) {
     const match = line.match(/^\s*([A-ZTF])\s*[.、:：]\s*(.+)$/);
     if (match) lines[match[1]] = match[2].trim();
   }
-  if (keys.every(key => lines[key])) return { ...Object.fromEntries(keys.map(key => [key, lines[key]])), _tip: tip };
+  if (keys.every(key => lines[key])) return { ...Object.fromEntries(keys.map(key => [key, lines[key]])), _tip: await ensureTip(tip) };
   throw new Error('模型未返回完整的逐项解析，请重试或更换模型。');
 }
