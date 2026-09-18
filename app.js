@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609181302';
+const DATA_VERSION = '202609181336';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -299,7 +299,7 @@ function renderCard() {
   card.innerHTML = `<div class="card-head"><span class="pill">${typeName}</span><span class="source-page">题目来源：ZCQ</span></div>
     <h3 class="question-title">${esc(q.stem)}</h3><div class="option-list">${q.options.map(o => renderOption(q, o)).join('')}</div>
     ${q.type === 'multiple' && !answered ? `<div class="submit-row"><button class="submit-btn" id="submitAnswer" ${selected.size ? '' : 'disabled'}>确认答案</button></div>` : ''}
-    ${answered ? renderFeedback(q) : ''}${answered && scope === 'reviewed' ? '<button id="retryAnswerBtn" class="retry-answer">重新作答</button>' : ''}${answered && scope === 'known' ? '<button id="restoreKnownBtn" class="retry-answer">移回待掌握，重新刷</button>' : ''}`;
+    ${answered ? renderFeedback(q) : ''}${answered && scope === 'reviewed' ? '<button id="retryAnswerBtn" class="retry-answer">重新作答</button>' : ''}${answered && scope === 'known' ? '<button id="restoreKnownBtn" class="retry-answer">移回待掌握，重新刷</button>' : ''}<button id="showAllAnswersBtn" class="immersive-answer-sheet-btn" type="button">一键显示全部题目答案</button>`;
   card.querySelectorAll('[data-option]').forEach(button => {
     let timer = null, longPressed = false;
     button.onclick = () => { if (longPressed) { longPressed = false; return; } choose(button.dataset.option); };
@@ -307,11 +307,18 @@ function renderCard() {
     ['pointerup', 'pointerleave', 'pointercancel'].forEach(name => button.addEventListener(name, () => { clearTimeout(timer); timer = null; }));
   });
   $('#submitAnswer')?.addEventListener('click', submit);
+  $('#showAllAnswersBtn')?.addEventListener('click', renderAnswerSheet);
   $('#openAiSettingsBtn')?.addEventListener('click', () => setView('settings'));
   $('#restoreKnownBtn')?.addEventListener('click', () => classify('unknown'));
   $('#retryAnswerBtn')?.addEventListener('click', () => { selected = new Set(); answered = false; explanationState = null; renderCard(); saveSession(); });
   $('#adoptAiAnswerBtn')?.addEventListener('click', () => { const choice = [...$('#aiAnswerChoice').selectedOptions].map(option => option.value); adoptAiAnswer(q, choice); });
   $('#keepBankAnswerBtn')?.addEventListener('click', event => { keepBankAnswer(q); event.currentTarget.textContent = '已恢复题库答案'; event.currentTarget.disabled = true; });
+}
+function renderAnswerSheet() {
+  const card = $('#questionCard');
+  const items = questions.filter(item => item.type === type);
+  card.innerHTML = `<div class="answer-sheet-head"><div><span class="pill">答案速览</span><h3>全部${esc(SUBJECTS[subject])}答案</h3><p>仅显示答案，不改变作答记录。</p></div><button id="closeAnswerSheetBtn" class="retry-answer" type="button">返回当前题</button></div><div class="answer-sheet-list">${items.map((item, index) => `<div class="answer-sheet-row"><b>${index + 1}. ${esc(item.answer.join('、'))}</b><span>${esc(item.stem)}</span></div>`).join('')}</div>`;
+  $('#closeAnswerSheetBtn').onclick = renderCard;
 }
 function keepBankAnswer(q) {
   if (!q) return;
@@ -562,7 +569,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-1302';
+    version.textContent = ' · 版本 2026.09.18-1336';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
