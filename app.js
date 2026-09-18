@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609180704';
+const DATA_VERSION = '202609180820';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -180,12 +180,14 @@ function renderFeedback(q) {
     ? explanationState.details : null;
   const analysis = details && q.options.every(o => details[o.key])
     ? `<div class="option-analysis"><strong>逐项解析</strong>${q.options.map(o => `<div class="analysis-row ${q.answer.includes(o.key) ? 'is-correct' : 'is-wrong'}"><b>${esc(o.key)}</b><span>${esc(details[o.key])}</span></div>`).join('')}</div>` : '';
-  const tip = details?._tip ? `<div class="memory-tip"><strong>✦ 速记技巧</strong><span>${esc(details._tip)}</span></div>` : '';
+  const tip = details?._tip
+    ? `<div class="memory-tip"><strong>✦ 速记技巧</strong><span>${esc(details._tip)}</span></div>`
+    : details ? '<p class="tip-unavailable">本题暂无可靠口诀或合适联想，因此不额外编造。</p>' : '';
   let aiHtml = analysis + tip;
   if (explanationState?.status === 'loading') aiHtml += `<div class="stream-analysis"><strong>AI 正在逐项解析…</strong>${explanationState.text ? `<div class="stream-text">${esc(explanationState.text)}</div>` : ''}</div>`;
-  else if (explanationState?.status === 'error') aiHtml += `<p class="error-message">AI 解析失败：${esc(explanationState.text)} <button id="retryExplainBtn" type="button" class="text-btn">重试</button></p>`;
+  else if (explanationState?.status === 'error') aiHtml += `<p class="error-message">AI 解析失败：${esc(explanationState.text)} <button id="retryExplainBtn" type="button" class="ai-explain-btn compact">重新尝试</button></p>`;
   else if (!analysis && !getSettings().apiKey) aiHtml = '<p class="ai-message">想看四个选项各自的原因？<button id="openAiSettingsBtn" class="text-btn">设置 AI Key</button></p>';
-  else if (!analysis) aiHtml = '<button id="retryExplainBtn" type="button" class="text-btn">查看 AI 逐项解析</button>';
+  else if (!analysis) aiHtml = '<button id="retryExplainBtn" type="button" class="ai-explain-btn">✦ 查看 AI 逐项解析</button>';
   return `<div class="feedback"><div class="feedback-header ${correct ? 'good' : 'bad'}"><span>${correct ? '✓' : '✗'}</span>${correct ? '回答正确' : '回答有误'}</div><div class="feedback-detail">
     <p class="answer-label"><strong>正确答案：</strong>${esc(answerText(q))}</p>
     ${q.explanation ? `<p><strong>资料校对说明：</strong>${esc(q.explanation)}</p>` : ''}
@@ -426,10 +428,8 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0703';
+    version.textContent = ' · 版本 2026.09.18-0820';
     versionHost.appendChild(version);
-    version.textContent = ' · 版本 2026.09.18-0715';
-    version.textContent = ' · 版本 2026.09.18-0730';
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
   $('#addProfileBtn').onclick = async () => {
