@@ -174,14 +174,14 @@ function renderOption(q, o) {
 function renderFeedback(q) {
   const correct = q.answer.length === selected.size && q.answer.every(a => selected.has(a));
   const details = explanationState?.status === 'done' && q.options.every(o => explanationState.details?.[o.key])
-    ? explanationState.details : q.optionExplanations;
+    ? explanationState.details : null;
   const analysis = details && q.options.every(o => details[o.key])
     ? `<div class="option-analysis"><strong>逐项解析</strong>${q.options.map(o => `<div class="analysis-row ${q.answer.includes(o.key) ? 'is-correct' : 'is-wrong'}"><b>${esc(o.key)}</b><span>${esc(details[o.key])}</span></div>`).join('')}</div>` : '';
   let aiHtml = analysis;
   if (explanationState?.status === 'loading') aiHtml += `<div class="stream-analysis"><strong>AI 正在逐项解析…</strong>${explanationState.text ? `<div class="stream-text">${esc(explanationState.text)}</div>` : ''}</div>`;
   else if (explanationState?.status === 'error') aiHtml += `<p class="error-message">AI 解析失败：${esc(explanationState.text)} <button id="retryExplainBtn" class="text-btn">重试</button></p>`;
   else if (!analysis && !getSettings().apiKey) aiHtml = '<p class="ai-message">想看四个选项各自的原因？<button id="openAiSettingsBtn" class="text-btn">设置 AI Key</button></p>';
-  else if (!analysis) aiHtml = '<button id="retryExplainBtn" class="text-btn">生成逐项解析</button>';
+  else if (!analysis) aiHtml = '<button id="retryExplainBtn" class="text-btn">查看 AI 逐项解析</button>';
   return `<div class="feedback"><div class="feedback-header ${correct ? 'good' : 'bad'}"><span>${correct ? '✓' : '✗'}</span>${correct ? '回答正确' : '回答有误'}</div><div class="feedback-detail">
     <p class="answer-label"><strong>正确答案：</strong>${esc(answerText(q))}</p>
     ${q.explanation ? `<p><strong>资料校对说明：</strong>${esc(q.explanation)}</p>` : ''}
@@ -251,7 +251,6 @@ function submit() {
   const previous = recordFor(q.id);
   records[q.id] = { ...previous, attempts: previous.attempts + 1, wrong: previous.wrong + (correct ? 0 : 1), lastAnswer: [...selected], lastCorrect: correct };
   saveRecords(); render(); saveSession();
-  if (getSettings().apiKey) generateExplanation();
 }
 async function generateExplanation() {
   const q = currentQuestion(); if (!q || !answered) return;
@@ -417,7 +416,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0620';
+    version.textContent = ' · 版本 2026.09.18-0655';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
@@ -503,13 +502,12 @@ function bind() {
   let swipeStart;
   const card = $('#questionCard');
   card.addEventListener('pointerdown', event => {
-    if (!answered) return;
     swipeStart = { x: event.clientX, y: event.clientY, pointerId: event.pointerId };
     card.setPointerCapture?.(event.pointerId);
     card.classList.add('is-dragging');
   });
   card.addEventListener('pointermove', event => {
-    if (!swipeStart || !answered) return;
+    if (!swipeStart) return;
     const dx = event.clientX - swipeStart.x;
     const dy = event.clientY - swipeStart.y;
     if (Math.abs(dx) < Math.abs(dy) * 1.15) return;
@@ -520,13 +518,13 @@ function bind() {
     card.classList.toggle('swipe-right', dx > 24);
   }, { passive: false });
   card.addEventListener('pointerup', event => {
-    if (!swipeStart || !answered) return;
+    if (!swipeStart) return;
     const dx = event.clientX - swipeStart.x;
     const dy = event.clientY - swipeStart.y;
     const commit = Math.abs(dx) > 75 && Math.abs(dx) > Math.abs(dy) * 1.4;
     card.classList.remove('is-dragging', 'swipe-left', 'swipe-right');
     card.style.transform = '';
-    if (commit) classify(dx < 0 ? 'known' : 'unknown');
+    if (commit && answered) classify(dx < 0 ? 'known' : 'unknown');
     swipeStart = null;
   });
   card.addEventListener('pointercancel', () => {
