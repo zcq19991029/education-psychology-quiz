@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609181136';
+const DATA_VERSION = '202609181138';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -372,7 +372,11 @@ async function generateExplanation() {
       if (performance.now() - lastPaint > 70) { renderCard(); lastPaint = performance.now(); }
     });
     explanationCache.set(cacheKey, details);
-    if (currentId === id && profileId === requestProfile && subject === requestSubject && answered) { explanationState = { status: 'done', details }; renderCard(); saveSession(); }
+    if (currentId === id && profileId === requestProfile && subject === requestSubject && answered) {
+      explanationState = { status: 'done', details };
+      if (details._reviewAnswer?.length && q.answer.join(',') !== details._reviewAnswer.join(',')) adoptAiAnswer(q, details._reviewAnswer);
+      else { renderCard(); saveSession(); }
+    }
   } catch (error) {
     if (currentId === id && profileId === requestProfile && subject === requestSubject && answered) { explanationState = { status: 'error', text: aiErrorMessage(error) }; renderCard(); }
   }
@@ -529,7 +533,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-1136';
+    version.textContent = ' · 版本 2026.09.18-1138';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
