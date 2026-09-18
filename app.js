@@ -26,7 +26,7 @@ function loadPrefs() {
   subject = SUBJECTS[saved.subject] ? saved.subject : 'psychology';
   type = ['single', 'multiple', 'judgment'].includes(saved.type) ? saved.type : 'single';
   mode = ['sequential', 'random'].includes(saved.mode) ? saved.mode : 'sequential';
-  scope = ['remaining', 'wrong', 'unseen', 'reviewed'].includes(saved.scope) ? saved.scope : 'remaining';
+  scope = ['remaining', 'wrong', 'unseen', 'reviewed', 'known'].includes(saved.scope) ? saved.scope : 'remaining';
 }
 function renderControls() {
   $('#scopeSelect').value = scope;
@@ -65,6 +65,7 @@ function renderProfiles() { $('#profileSelect').innerHTML = profiles.map(item =>
 function eligible(q) {
   if (q.type !== type) return false;
   if (scope === 'reviewed') return recordFor(q.id).attempts > 0;
+  if (scope === 'known') return recordFor(q.id).status === 'known';
   if (recordFor(q.id).status === 'known') return false;
   if (scope === 'wrong') return recordFor(q.id).wrong > 0;
   if (scope === 'unseen') return recordFor(q.id).attempts === 0;
@@ -213,10 +214,11 @@ function renderCard() {
   card.innerHTML = `<div class="card-head"><span class="pill">${typeName}</span><span class="source-page">题目来源：ZCQ</span></div>
     <h3 class="question-title">${esc(q.stem)}</h3><div class="option-list">${q.options.map(o => renderOption(q, o)).join('')}</div>
     ${q.type === 'multiple' && !answered ? `<div class="submit-row"><button class="submit-btn" id="submitAnswer" ${selected.size ? '' : 'disabled'}>确认答案</button></div>` : ''}
-    ${answered ? renderFeedback(q) : ''}${answered && scope === 'reviewed' ? '<button id="retryAnswerBtn" class="retry-answer">重新作答</button>' : ''}`;
+    ${answered ? renderFeedback(q) : ''}${answered && scope === 'reviewed' ? '<button id="retryAnswerBtn" class="retry-answer">重新作答</button>' : ''}${answered && scope === 'known' ? '<button id="restoreKnownBtn" class="retry-answer">移回待掌握，重新刷</button>' : ''}`;
   card.querySelectorAll('[data-option]').forEach(button => button.onclick = () => choose(button.dataset.option));
   $('#submitAnswer')?.addEventListener('click', submit);
   $('#openAiSettingsBtn')?.addEventListener('click', () => setView('settings'));
+  $('#restoreKnownBtn')?.addEventListener('click', () => classify('unknown'));
   $('#retryAnswerBtn')?.addEventListener('click', () => { selected = new Set(); answered = false; explanationState = null; renderCard(); saveSession(); });
 }
 function renderOverview() {
@@ -419,7 +421,7 @@ function bind() {
     version.className = 'app-version';
     version.textContent = ' · 版本 2026.09.18-0703';
     versionHost.appendChild(version);
-    version.textContent = ' · 版本 2026.09.18-0705';
+    version.textContent = ' · 版本 2026.09.18-0706';
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
   $('#addProfileBtn').onclick = async () => {

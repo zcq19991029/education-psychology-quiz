@@ -7,7 +7,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; worker-src 'self' blob:; connect-src 'self' https: http://localhost:* http://127.0.0.1:*; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'none'" />
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <title>高校资格证刷题zcq版</title>
-  <link rel="stylesheet" href="./styles.css?v=202609180705" />
+  <link rel="stylesheet" href="./styles.css?v=202609180706" />
 </head>
 <body>
   <div class="shell">
@@ -44,7 +44,7 @@
         <section id="practiceView" class="workspace">
           <div class="section-heading"><div><div class="eyebrow dark">PRACTICE MODE</div><h2><span id="practiceSubject">教育心理学</span> · 专注练习</h2></div><div class="practice-heading-actions"><div class="keyboard-tip">快捷键 <kbd>1-4</kbd> 选项 · <kbd>←</kbd> 记住 · <kbd>→</kbd> 再练</div><button id="immersiveBtn" class="immersive-btn" type="button">⛶ 沉浸式刷题</button></div></div>
           <div class="type-tabs" role="group" aria-label="题型模块"><button class="active" data-type="single"><span>01</span><strong>单选题</strong><small id="singleCount">—</small></button><button data-type="multiple"><span>02</span><strong>多选题</strong><small id="multipleCount">—</small></button><button data-type="judgment"><span>03</span><strong>判断题</strong><small id="judgmentCount">—</small></button></div>
-          <div class="controls"><div class="segmented" role="group" aria-label="出题顺序"><button class="selected" data-mode="sequential">☷ 顺序刷题</button><button data-mode="random">⚄ 随机刷题</button></div><select id="scopeSelect" aria-label="练习范围"><option value="remaining">全部待掌握</option><option value="wrong">错题强化</option><option value="unseen">尚未作答</option><option value="reviewed">已刷题回看</option></select><button id="resetBtn" class="subtle-btn">重置本账号本学科进度</button></div>
+          <div class="controls"><div class="segmented" role="group" aria-label="出题顺序"><button class="selected" data-mode="sequential">☷ 顺序刷题</button><button data-mode="random">⚄ 随机刷题</button></div><select id="scopeSelect" aria-label="练习范围"><option value="remaining">全部待掌握</option><option value="wrong">错题强化</option><option value="unseen">尚未作答</option><option value="reviewed">已刷题回看</option><option value="known">已记住回看 / 移回待掌握</option></select><button id="resetBtn" class="subtle-btn">重置本账号本学科进度</button></div>
           <div class="practice-grid"><div class="card-column"><div class="session-line"><span id="sessionText">正在加载题目…</span><span id="modeText">顺序练习</span></div><div class="progress-track"><div id="progressFill"></div></div><div class="card-navigation"><button id="prevBtn" disabled>← 上一题</button><button id="nextBtn" disabled>下一题 →</button></div><article id="questionCard" class="question-card" aria-live="polite"></article><div class="card-actions"><button id="unknownBtn" class="action unknown" disabled><span>→</span><div><strong>还不会，再练</strong><small>右滑 · 留在题库</small></div></button><button id="knownBtn" class="action known" disabled><div><strong>我已记住</strong><small>左滑 · 移出待掌握</small></div><span>✓</span></button></div><p class="swipe-tip">误点“已记住”可点上一题撤回，再改选“还不会”。下一题可暂时跳过，不标记已记住。</p></div><aside class="help-panel"><div class="panel-top"><span>✦</span> 刷题指南</div><h3>反复巩固，<br />直到真正记住</h3><div class="help-step"><b>01</b><div><strong>先作答</strong><p>立即查看正确项与错选项。</p></div></div><div class="help-step"><b>02</b><div><strong>看解析</strong><p>连接 AI 后生成针对这次作答的说明。</p></div></div><div class="help-step"><b>03</b><div><strong>决定下一轮</strong><p>记住的退出，不会的继续刷。</p></div></div></aside></div>
         </section>
         <section id="overviewView" class="workspace hidden"><div class="section-heading"><div><div class="eyebrow dark">YOUR PROGRESS</div><h2>学习概览</h2></div></div><div id="overviewContent"></div></section>
@@ -57,6 +57,6 @@
   <dialog id="announcementDialog"><h3>使用公告</h3><p>先选学习账号和科目，再选单选、多选或判断。答题后看红绿反馈；上一题可以撤回误点的“我已记住”，已刷题回看可以找回做过的题。进度保存在当前浏览器，不同设备互不干扰，也不会自动同步。</p><p><strong>建议填写自己的 AI Key：</strong>可获得错选、漏选的逐项解析，也能识别新资料并检查重复题。不填写也可以直接刷网站已发布的题库、查看标准答案和已有解析。</p><div><button id="closeAnnouncement">知道了</button><button id="announcementAi">配置 AI</button></div></dialog>
   <dialog id="guideDialog"><h3>刷题指南</h3><p>先作答，立即查看正确项与错选项；连接 AI 后可生成针对本次作答的逐项说明。点击“我已记住”移出待掌握，点击“还不会，再练”保留在题库。误点时可用上一题撤回。</p><div><button id="closeGuide">知道了</button></div></dialog>
   <dialog id="resetDialog"><h3>重置当前账号本学科进度？</h3><p>该账号在当前科目的已记住、错题和作答记录将从本机清除。</p><div><button id="cancelReset">取消</button><button id="confirmReset">确认重置</button></div></dialog>
-  <script type="module" src="./app.js?v=202609180705"></script>
+  <script type="module" src="./app.js?v=202609180706"></script>
 </body>
 </html>
