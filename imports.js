@@ -117,6 +117,5 @@ export async function aiImport(text, subject, onProgress) {
       throw error;
     }
   }
-  const seen = new Set();
-  return collected.filter(q => { const key = `${q.type}:${q.stem.replace(/\s/g, '')}`; if (seen.has(key)) return false; seen.add(key); return true; });
+  return collected;
 }

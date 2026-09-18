@@ -53,11 +53,16 @@ export async function chat(messages, { json = false } = {}) {
   const response = await fetch(endpoint(settings.baseUrl, '/chat/completions'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${settings.apiKey}` },
-    body: JSON.stringify({ model: settings.model.trim(), messages, temperature: 0.2, ...(json ? { response_format: { type: 'json_object' } } : {}) })
+    body: JSON.stringify({ model: settings.model.trim(), messages, temperature: 0.2,
+      ...(settings.provider === 'deepseek' ? { thinking: { type: 'disabled' } } : {}),
+      ...(json ? { response_format: { type: 'json_object' } } : {}) })
   });
   let data;
   try { data = await response.json(); } catch { throw new Error(`接口返回了非 JSON 内容（HTTP ${response.status}）。`); }
-  if (!response.ok) throw new Error(data.error?.message || data.message || `接口请求失败（HTTP ${response.status}）。`);
+  if (!response.ok) {
+    const message = String(data.error?.message || data.message || `接口请求失败（HTTP ${response.status}）。`);
+    throw new Error(message.replaceAll(settings.apiKey, '[已隐藏 Key]'));
+  }
   const content = data.choices?.[0]?.message?.content;
   if (!content) throw new Error('模型未返回内容，请更换模型后重试。');
   return content;
@@ -72,8 +77,67 @@ export async function listModels() {
   return (data.data || []).map(item => item.id).filter(Boolean).sort();
 }
 
-export async function explainQuestion(question, selection) {
+async function streamChat(messages, onProgress) {
+  const settings = getSettings();
+  if (!settings.apiKey) throw new Error('请先在 AI 设置中填写 API Key。');
+  if (!settings.model.trim()) throw new Error('请先选择或填写模型名称。');
+  const response = await fetch(endpoint(settings.baseUrl, '/chat/completions'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${settings.apiKey}` },
+    body: JSON.stringify({ model: settings.model.trim(), messages, temperature: 0.2,
+      max_tokens: 800, stream: true,
+      ...(settings.provider === 'deepseek' ? { thinking: { type: 'disabled' } } : {}) })
+  });
+  if (!response.ok) {
+    let message = `接口请求失败（HTTP ${response.status}）。`;
+    try { const data = await response.json(); message = data.error?.message || data.message || message; } catch { /* use status */ }
+    throw new Error(String(message).replaceAll(settings.apiKey, '[已隐藏 Key]'));
+  }
+  if (!response.body) throw new Error('接口没有返回可读取的流式响应。');
+  const reader = response.body.getReader(), decoder = new TextDecoder();
+  let pending = '', result = '', finished = false;
+  const consume = event => {
+    const data = event.split(/\r?\n/).filter(line => line.startsWith('data:')).map(line => line.slice(5).trimStart()).join('\n');
+    if (!data) return;
+    if (data === '[DONE]') { finished = true; return; }
+    let packet;
+    try { packet = JSON.parse(data); } catch { return; }
+    if (packet.error) throw new Error(String(packet.error.message || '模型返回流式错误').replaceAll(settings.apiKey, '[已隐藏 Key]'));
+    const part = packet.choices?.[0]?.delta?.content;
+    if (typeof part === 'string' && part) { result += part; onProgress?.(result); }
+  };
+  while (!finished) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    pending += decoder.decode(value, { stream: true });
+    let boundary;
+    while ((boundary = /\r?\n\r?\n/.exec(pending))) {
+      consume(pending.slice(0, boundary.index));
+      pending = pending.slice(boundary.index + boundary[0].length);
+      if (finished) break;
+    }
+  }
+  if (pending.trim() && !finished) consume(pending);
+  if (!result.trim()) throw new Error('模型未返回解析文字，请重试或更换模型。');
+  return result.trim();
+}
+
+export async function explainQuestion(question, selection, onProgress) {
   const options = question.options.map(item => `${item.key}. ${item.text}`).join('\n');
-  const prompt = `请针对这道教育类考试题写简短而有教学价值的中文解析。先解释为什么正确项符合题意，再针对学生选错或漏选的选项说明原因。逐项结合选项文字，不能只重复答案；若题干是否定式，明确区分“常见现象”和“所问分类”。资料未提供足够依据时请标明不确定，不要编造出处。控制在 180 字左右。\n题型：${question.type}\n题干：${question.stem}\n选项：\n${options}\n标准答案：${question.answer.join(',')}\n学生选择：${selection.join(',')}`;
-  return (await chat([{ role: 'system', content: '你是审慎的高校教师资格证备考辅导老师。输出纯文本，不使用 Markdown。' }, { role: 'user', content: prompt }])).trim();
+  const keys = question.options.map(item => item.key);
+  const prompt = `请针对这道教育类考试题逐项解析。每项解释它为何符合或不符合题意，联系具体知识点；不能只重复答案。否定式题干要说明判别标准；没有依据时如实说明。每项 25-60 字。严格按选项顺序，每项单独一行，格式为“A: 解析”，不要开头、结尾或 Markdown。\n题型：${question.type}\n题干：${question.stem}\n选项：\n${options}\n标准答案：${question.answer.join(',')}\n学生选择：${selection.join(',')}`;
+  const raw = await streamChat([{ role: 'system', content: '你是审慎的高校教师资格证备考辅导老师。按题目选项顺序逐行输出每项的具体原因。' }, { role: 'user', content: prompt }], onProgress);
+  let parsed;
+  try { parsed = JSON.parse(raw.replace(/^\x60\x60\x60(?:json)?\s*/i, '').replace(/\x60\x60\x60\s*$/, '')); } catch { /* try line parsing below */ }
+  const source = parsed?.options || parsed;
+  if (source && keys.every(key => typeof source[key] === 'string' && source[key].trim())) {
+    return Object.fromEntries(keys.map(key => [key, source[key].trim()]));
+  }
+  const lines = {};
+  for (const line of raw.split('\n')) {
+    const match = line.match(/^\s*([A-DTF])\s*[.、:：]\s*(.+)$/);
+    if (match) lines[match[1]] = match[2].trim();
+  }
+  if (keys.every(key => lines[key])) return Object.fromEntries(keys.map(key => [key, lines[key]]));
+  throw new Error('模型未返回完整的逐项解析，请重试或更换模型。');
 }

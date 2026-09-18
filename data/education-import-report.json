@@ -1,0 +1,106 @@
+{
+  "sourceFiles": [
+    "教育学题库-单选.docx",
+    "教育学题库-多选.docx",
+    "教育学题库-判断.docx",
+    "教育学卷子.docx"
+  ],
+  "bankCounts": {
+    "single": 307,
+    "multiple": 85,
+    "judgment": 87
+  },
+  "examObjectiveFound": 10,
+  "examObjectiveAdded": 10,
+  "examObjectiveDuplicates": [],
+  "exactDuplicatesRemoved": [
+    "education-multiple-30"
+  ],
+  "publishedCounts": {
+    "single": 317,
+    "multiple": 84,
+    "judgment": 87
+  },
+  "total": 488,
+  "singleNumberRange": [
+    1,
+    307
+  ],
+  "singleMissingNumbers": [],
+  "bankDuplicateStems": [
+    {
+      "ids": [
+        "education-multiple-29",
+        "education-multiple-30"
+      ],
+      "answers": [
+        [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      ]
+    }
+  ],
+  "issues": {
+    "single": [],
+    "multiple": [],
+    "judgment": [],
+    "exam": []
+  },
+  "paperSections": [
+    {
+      "paper": 1,
+      "items": 11,
+      "numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "sections": {
+        "单项选择题": 5,
+        "名词解释": 3,
+        "材料分析题": 2,
+        "论述题": 1
+      }
+    },
+    {
+      "paper": 2,
+      "items": 11,
+      "numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "sections": {
+        "单项选择题": 5,
+        "名词解释": 3,
+        "材料分析题": 2,
+        "论述题": 1
+      }
+    }
+  ]
+}
