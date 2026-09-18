@@ -11142,5 +11142,2214 @@
       "T"
     ],
     "sourcePage": 44
+  },
+  {
+    "id": "psychology-training-single-001",
+    "number": "1",
+    "type": "single",
+    "stem": "高等教育心理学的研究对象是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "高校教师的心理特征"
+      },
+      {
+        "key": "B",
+        "text": "高等教育情境中学与教的基本心理规律"
+      },
+      {
+        "key": "C",
+        "text": "大学生生理发育规律"
+      },
+      {
+        "key": "D",
+        "text": "高校管理规章制度"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-002",
+    "number": "2",
+    "type": "single",
+    "stem": "心理学独立标志事件是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "冯特建立世界第一个心理学实验室"
+      },
+      {
+        "key": "B",
+        "text": "桑代克提出试误说"
+      },
+      {
+        "key": "C",
+        "text": "巴甫洛夫经典条件反射"
+      },
+      {
+        "key": "D",
+        "text": "斯金纳操作性条件反射"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-003",
+    "number": "3",
+    "type": "single",
+    "stem": "维果茨基提出的核心教育心理学概念是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "自我效能感"
+      },
+      {
+        "key": "B",
+        "text": "最近发展区"
+      },
+      {
+        "key": "C",
+        "text": "成就动机"
+      },
+      {
+        "key": "D",
+        "text": "观察学习"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-004",
+    "number": "4",
+    "type": "single",
+    "stem": "桑代克提出三大学习定律不包括（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "准备律"
+      },
+      {
+        "key": "B",
+        "text": "练习律"
+      },
+      {
+        "key": "C",
+        "text": "效果律"
+      },
+      {
+        "key": "D",
+        "text": "强化律"
+      }
+    ],
+    "answer": [
+      "D"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-005",
+    "number": "6",
+    "type": "single",
+    "stem": "先学习骑自行车再学骑电动车更容易，属于（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "正顺向迁移"
+      },
+      {
+        "key": "B",
+        "text": "负顺向迁移"
+      },
+      {
+        "key": "C",
+        "text": "正逆向迁移"
+      },
+      {
+        "key": "D",
+        "text": "负逆向迁移"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-006",
+    "number": "7",
+    "type": "single",
+    "stem": "班杜拉自我效能感是指（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "对行为奖励的期待"
+      },
+      {
+        "key": "B",
+        "text": "个体判断自身能否完成任务的信念"
+      },
+      {
+        "key": "C",
+        "text": "个体内在成就需要"
+      },
+      {
+        "key": "D",
+        "text": "对学习结果的评价"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-007",
+    "number": "8",
+    "type": "single",
+    "stem": "学生为考研获得更好职业发展而努力学习属于（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "认知内驱力"
+      },
+      {
+        "key": "B",
+        "text": "自我提高内驱力"
+      },
+      {
+        "key": "C",
+        "text": "附属内驱力"
+      },
+      {
+        "key": "D",
+        "text": "外部惩罚"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-008",
+    "number": "9",
+    "type": "single",
+    "stem": "学习迁移中，先前学习对后继学习产生影响称为（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "逆向迁移"
+      },
+      {
+        "key": "B",
+        "text": "顺向迁移"
+      },
+      {
+        "key": "C",
+        "text": "负迁移"
+      },
+      {
+        "key": "D",
+        "text": "垂直迁移"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-009",
+    "number": "10",
+    "type": "single",
+    "stem": "记忆术、做笔记属于哪一类学习策略（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "复述策略"
+      },
+      {
+        "key": "B",
+        "text": "精加工策略"
+      },
+      {
+        "key": "C",
+        "text": "组织策略"
+      },
+      {
+        "key": "D",
+        "text": "资源管理策略"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-010",
+    "number": "11",
+    "type": "single",
+    "stem": "“举一反三、触类旁通” 体现的心理学现象是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "记忆"
+      },
+      {
+        "key": "B",
+        "text": "迁移"
+      },
+      {
+        "key": "C",
+        "text": "注意"
+      },
+      {
+        "key": "D",
+        "text": "动机"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-011",
+    "number": "12",
+    "type": "single",
+    "stem": "维果茨基对应的教学模式是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "支架式教学"
+      },
+      {
+        "key": "B",
+        "text": "程序教学"
+      },
+      {
+        "key": "C",
+        "text": "发现学习"
+      },
+      {
+        "key": "D",
+        "text": "非指导性教学"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-012",
+    "number": "13",
+    "type": "single",
+    "stem": "马斯洛需要层次理论最高层次是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "尊重需要"
+      },
+      {
+        "key": "B",
+        "text": "归属与爱的需要"
+      },
+      {
+        "key": "C",
+        "text": "自我实现需要"
+      },
+      {
+        "key": "D",
+        "text": "安全需要"
+      }
+    ],
+    "answer": [
+      "C"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-013",
+    "number": "14",
+    "type": "single",
+    "stem": "个体对自己认知过程进行监控调节称为（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "认知策略"
+      },
+      {
+        "key": "B",
+        "text": "元认知"
+      },
+      {
+        "key": "C",
+        "text": "迁移"
+      },
+      {
+        "key": "D",
+        "text": "动机"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-014",
+    "number": "15",
+    "type": "single",
+    "stem": "精加工策略属于（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "认知策略"
+      },
+      {
+        "key": "B",
+        "text": "元认知策略"
+      },
+      {
+        "key": "C",
+        "text": "资源管理策略"
+      },
+      {
+        "key": "D",
+        "text": "监控策略"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-015",
+    "number": "16",
+    "type": "single",
+    "stem": "大学生常见的自我意识矛盾不包括（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "理想自我与现实自我冲突"
+      },
+      {
+        "key": "B",
+        "text": "独立与依赖冲突"
+      },
+      {
+        "key": "C",
+        "text": "交往需要与封闭心理冲突"
+      },
+      {
+        "key": "D",
+        "text": "完全没有心理冲突"
+      }
+    ],
+    "answer": [
+      "D"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-016",
+    "number": "17",
+    "type": "single",
+    "stem": "个体对自己以及自己与周围事物关系的认识是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "自我意识"
+      },
+      {
+        "key": "B",
+        "text": "自我效能"
+      },
+      {
+        "key": "C",
+        "text": "归因"
+      },
+      {
+        "key": "D",
+        "text": "成就动机"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-017",
+    "number": "18",
+    "type": "single",
+    "stem": "成就动机理论提出者是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "阿特金森"
+      },
+      {
+        "key": "B",
+        "text": "奥苏贝尔"
+      },
+      {
+        "key": "C",
+        "text": "班杜拉"
+      },
+      {
+        "key": "D",
+        "text": "维果茨基"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-018",
+    "number": "19",
+    "type": "single",
+    "stem": "大学生自我意识发展的关键期大致在（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "大一"
+      },
+      {
+        "key": "B",
+        "text": "大学二三年级"
+      },
+      {
+        "key": "C",
+        "text": "毕业季"
+      },
+      {
+        "key": "D",
+        "text": "入学前"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-019",
+    "number": "20",
+    "type": "single",
+    "stem": "高成就动机者倾向选择（）难度任务",
+    "options": [
+      {
+        "key": "A",
+        "text": "极低"
+      },
+      {
+        "key": "B",
+        "text": "中等"
+      },
+      {
+        "key": "C",
+        "text": "极高"
+      },
+      {
+        "key": "D",
+        "text": "任意"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-020",
+    "number": "21",
+    "type": "single",
+    "stem": "建构主义学习理论强调学习是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "教师灌输知识"
+      },
+      {
+        "key": "B",
+        "text": "学生主动建构意义"
+      },
+      {
+        "key": "C",
+        "text": "刺激与反应联结"
+      },
+      {
+        "key": "D",
+        "text": "被动接受信息"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-021",
+    "number": "22",
+    "type": "single",
+    "stem": "品德心理结构四个成分是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "知、情、意、行"
+      },
+      {
+        "key": "B",
+        "text": "感知记忆思维想象"
+      },
+      {
+        "key": "C",
+        "text": "动机兴趣信念理想"
+      },
+      {
+        "key": "D",
+        "text": "自我本我超我"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-022",
+    "number": "23",
+    "type": "single",
+    "stem": "耶克斯‑多德森定律表明（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "动机越强成绩越好"
+      },
+      {
+        "key": "B",
+        "text": "中等强度动机最有利于复杂任务学习"
+      },
+      {
+        "key": "C",
+        "text": "动机与成绩无关"
+      },
+      {
+        "key": "D",
+        "text": "低动机适合简单任务"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-023",
+    "number": "24",
+    "type": "single",
+    "stem": "课堂中学生不由自主看向窗外，属于（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "无意注意"
+      },
+      {
+        "key": "B",
+        "text": "有意注意"
+      },
+      {
+        "key": "C",
+        "text": "有意后注意"
+      },
+      {
+        "key": "D",
+        "text": "随意注意"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-024",
+    "number": "25",
+    "type": "single",
+    "stem": "个体将成功归因为自身努力属于（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "稳定内控归因"
+      },
+      {
+        "key": "B",
+        "text": "不稳定内控归因"
+      },
+      {
+        "key": "C",
+        "text": "稳定外控归因"
+      },
+      {
+        "key": "D",
+        "text": "不稳定外控归因"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-025",
+    "number": "26",
+    "type": "single",
+    "stem": "创造性思维核心是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "发散思维"
+      },
+      {
+        "key": "B",
+        "text": "聚合思维"
+      },
+      {
+        "key": "C",
+        "text": "逻辑思维"
+      },
+      {
+        "key": "D",
+        "text": "动作思维"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-026",
+    "number": "27",
+    "type": "single",
+    "stem": "教师长期压力带来情绪耗竭、去个性化、低成就感称为（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "职业倦怠"
+      },
+      {
+        "key": "B",
+        "text": "教学反思"
+      },
+      {
+        "key": "C",
+        "text": "教师威信"
+      },
+      {
+        "key": "D",
+        "text": "角色认同"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-027",
+    "number": "28",
+    "type": "single",
+    "stem": "教师通过不断审视反思自己课堂行为改善教学称为（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "教学反思"
+      },
+      {
+        "key": "B",
+        "text": "教学监控能力"
+      },
+      {
+        "key": "C",
+        "text": "教师威信"
+      },
+      {
+        "key": "D",
+        "text": "角色期待"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-028",
+    "number": "29",
+    "type": "single",
+    "stem": "学生在无人监督时依旧遵守纪律属于（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "从众"
+      },
+      {
+        "key": "B",
+        "text": "自律"
+      },
+      {
+        "key": "C",
+        "text": "服从"
+      },
+      {
+        "key": "D",
+        "text": "依从"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-029",
+    "number": "30",
+    "type": "single",
+    "stem": "考试紧张焦虑属于（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "情绪问题"
+      },
+      {
+        "key": "B",
+        "text": "认知障碍"
+      },
+      {
+        "key": "C",
+        "text": "人格障碍"
+      },
+      {
+        "key": "D",
+        "text": "意志障碍"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-030",
+    "number": "31",
+    "type": "single",
+    "stem": "短时记忆保持时间大约为（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "0.25‑2 秒"
+      },
+      {
+        "key": "B",
+        "text": "1 分钟以内"
+      },
+      {
+        "key": "C",
+        "text": "1 小时"
+      },
+      {
+        "key": "D",
+        "text": "永久保存"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-031",
+    "number": "32",
+    "type": "single",
+    "stem": "经典条件反射代表人物（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "巴甫洛夫"
+      },
+      {
+        "key": "B",
+        "text": "斯金纳"
+      },
+      {
+        "key": "C",
+        "text": "班杜拉"
+      },
+      {
+        "key": "D",
+        "text": "布鲁纳"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-032",
+    "number": "33",
+    "type": "single",
+    "stem": "问题解决的起始环节是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "理解问题"
+      },
+      {
+        "key": "B",
+        "text": "发现问题"
+      },
+      {
+        "key": "C",
+        "text": "提出假设"
+      },
+      {
+        "key": "D",
+        "text": "检验假设"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-033",
+    "number": "34",
+    "type": "single",
+    "stem": "布鲁纳提倡的学习方式是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "发现学习"
+      },
+      {
+        "key": "B",
+        "text": "接受学习"
+      },
+      {
+        "key": "C",
+        "text": "机械学习"
+      },
+      {
+        "key": "D",
+        "text": "观察学习"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-034",
+    "number": "35",
+    "type": "single",
+    "stem": "当学生遭遇挫折，用合理化理由解释失败属于（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "心理防御机制"
+      },
+      {
+        "key": "B",
+        "text": "学习策略"
+      },
+      {
+        "key": "C",
+        "text": "归因训练"
+      },
+      {
+        "key": "D",
+        "text": "元认知"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-035",
+    "number": "36",
+    "type": "single",
+    "stem": "资源管理策略不包含（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "时间管理"
+      },
+      {
+        "key": "B",
+        "text": "环境管理"
+      },
+      {
+        "key": "C",
+        "text": "努力管理"
+      },
+      {
+        "key": "D",
+        "text": "做笔记"
+      }
+    ],
+    "answer": [
+      "D"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-036",
+    "number": "37",
+    "type": "single",
+    "stem": "非正式群体对班级的影响取决于（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "人数多少"
+      },
+      {
+        "key": "B",
+        "text": "凝聚力强弱以及目标是否一致"
+      },
+      {
+        "key": "C",
+        "text": "性别构成"
+      },
+      {
+        "key": "D",
+        "text": "活动频率"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-037",
+    "number": "38",
+    "type": "single",
+    "stem": "从众现象指个体（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "独立做出判断"
+      },
+      {
+        "key": "B",
+        "text": "在群体压力下改变观点行为"
+      },
+      {
+        "key": "C",
+        "text": "完全服从权威命令"
+      },
+      {
+        "key": "D",
+        "text": "反抗群体"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-038",
+    "number": "39",
+    "type": "single",
+    "stem": "罗杰斯人本主义教学主张（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "以教师为中心"
+      },
+      {
+        "key": "B",
+        "text": "以学生为中心，非指导性教学"
+      },
+      {
+        "key": "C",
+        "text": "强化训练"
+      },
+      {
+        "key": "D",
+        "text": "程序教学"
+      }
+    ],
+    "answer": [
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-039",
+    "number": "40",
+    "type": "single",
+    "stem": "心理健康教育首要原则是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "面向全体学生"
+      },
+      {
+        "key": "B",
+        "text": "只针对问题学生"
+      },
+      {
+        "key": "C",
+        "text": "惩罚为主"
+      },
+      {
+        "key": "D",
+        "text": "诊断治疗优先"
+      }
+    ],
+    "answer": [
+      "A"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-040",
+    "number": "1",
+    "type": "multiple",
+    "stem": "学习迁移按效果划分包括（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "正迁移"
+      },
+      {
+        "key": "B",
+        "text": "负迁移"
+      },
+      {
+        "key": "C",
+        "text": "零迁移"
+      },
+      {
+        "key": "D",
+        "text": "顺向迁移"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-041",
+    "number": "2",
+    "type": "multiple",
+    "stem": "桑代克三大学习定律（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "准备律"
+      },
+      {
+        "key": "B",
+        "text": "练习律"
+      },
+      {
+        "key": "C",
+        "text": "效果律"
+      },
+      {
+        "key": "D",
+        "text": "强化律"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-042",
+    "number": "3",
+    "type": "multiple",
+    "stem": "奥苏贝尔学习动机分为（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "认知内驱力"
+      },
+      {
+        "key": "B",
+        "text": "自我提高内驱力"
+      },
+      {
+        "key": "C",
+        "text": "附属内驱力"
+      },
+      {
+        "key": "D",
+        "text": "成就内驱力"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-043",
+    "number": "4",
+    "type": "multiple",
+    "stem": "精加工策略包括（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "记忆术"
+      },
+      {
+        "key": "B",
+        "text": "做笔记"
+      },
+      {
+        "key": "C",
+        "text": "提问"
+      },
+      {
+        "key": "D",
+        "text": "画结构图"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-044",
+    "number": "5",
+    "type": "multiple",
+    "stem": "认知策略主要包括（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "复述策略"
+      },
+      {
+        "key": "B",
+        "text": "精加工策略"
+      },
+      {
+        "key": "C",
+        "text": "组织策略"
+      },
+      {
+        "key": "D",
+        "text": "计划策略"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-045",
+    "number": "6",
+    "type": "multiple",
+    "stem": "成就动机分为两种倾向（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "追求成功"
+      },
+      {
+        "key": "B",
+        "text": "避免失败"
+      },
+      {
+        "key": "C",
+        "text": "自我实现"
+      },
+      {
+        "key": "D",
+        "text": "附属需要"
+      }
+    ],
+    "answer": [
+      "A",
+      "B"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-046",
+    "number": "7",
+    "type": "multiple",
+    "stem": "马斯洛缺失性需要包含（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "生理需要"
+      },
+      {
+        "key": "B",
+        "text": "安全需要"
+      },
+      {
+        "key": "C",
+        "text": "归属与爱"
+      },
+      {
+        "key": "D",
+        "text": "尊重需要"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-047",
+    "number": "8",
+    "type": "multiple",
+    "stem": "品德四要素（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "道德认识"
+      },
+      {
+        "key": "B",
+        "text": "道德情感"
+      },
+      {
+        "key": "C",
+        "text": "道德意志"
+      },
+      {
+        "key": "D",
+        "text": "道德行为"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-048",
+    "number": "9",
+    "type": "multiple",
+    "stem": "大学生心理健康标准有（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "智力正常"
+      },
+      {
+        "key": "B",
+        "text": "情绪健康"
+      },
+      {
+        "key": "C",
+        "text": "人格完整"
+      },
+      {
+        "key": "D",
+        "text": "人际关系和谐"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-049",
+    "number": "10",
+    "type": "multiple",
+    "stem": "影响问题解决主观因素（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "定势"
+      },
+      {
+        "key": "B",
+        "text": "功能固着"
+      },
+      {
+        "key": "C",
+        "text": "知识经验"
+      },
+      {
+        "key": "D",
+        "text": "智力水平"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-050",
+    "number": "11",
+    "type": "multiple",
+    "stem": "影响自我效能感的来源有（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "成败经验"
+      },
+      {
+        "key": "B",
+        "text": "替代经验"
+      },
+      {
+        "key": "C",
+        "text": "言语劝说"
+      },
+      {
+        "key": "D",
+        "text": "情绪唤醒"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-051",
+    "number": "12",
+    "type": "multiple",
+    "stem": "班杜拉观察学习过程分为（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "注意过程"
+      },
+      {
+        "key": "B",
+        "text": "保持过程"
+      },
+      {
+        "key": "C",
+        "text": "复制过程"
+      },
+      {
+        "key": "D",
+        "text": "动机过程"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-052",
+    "number": "13",
+    "type": "multiple",
+    "stem": "问题解决基本阶段包括（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "发现问题"
+      },
+      {
+        "key": "B",
+        "text": "理解问题"
+      },
+      {
+        "key": "C",
+        "text": "提出假设"
+      },
+      {
+        "key": "D",
+        "text": "检验假设"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-053",
+    "number": "14",
+    "type": "multiple",
+    "stem": "资源管理策略包含（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "时间管理"
+      },
+      {
+        "key": "B",
+        "text": "环境管理"
+      },
+      {
+        "key": "C",
+        "text": "努力管理"
+      },
+      {
+        "key": "D",
+        "text": "学业求助策略"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-054",
+    "number": "15",
+    "type": "multiple",
+    "stem": "教师职业倦怠三个核心维度（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "情绪耗竭"
+      },
+      {
+        "key": "B",
+        "text": "去个性化"
+      },
+      {
+        "key": "C",
+        "text": "个人成就感降低"
+      },
+      {
+        "key": "D",
+        "text": "教学压力"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-055",
+    "number": "16",
+    "type": "multiple",
+    "stem": "教学反思内容包括（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "对活动反思"
+      },
+      {
+        "key": "B",
+        "text": "活动中反思"
+      },
+      {
+        "key": "C",
+        "text": "活动后反思"
+      },
+      {
+        "key": "D",
+        "text": "课后批评学生"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-056",
+    "number": "17",
+    "type": "multiple",
+    "stem": "元认知策略分为（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "计划策略"
+      },
+      {
+        "key": "B",
+        "text": "监控策略"
+      },
+      {
+        "key": "C",
+        "text": "调节策略"
+      },
+      {
+        "key": "D",
+        "text": "时间管理策略"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-057",
+    "number": "18",
+    "type": "multiple",
+    "stem": "大学生人际交往特点（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "交往愿望强烈"
+      },
+      {
+        "key": "B",
+        "text": "注重精神交流"
+      },
+      {
+        "key": "C",
+        "text": "交往存在理想化"
+      },
+      {
+        "key": "D",
+        "text": "人际冲突客观存在"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-058",
+    "number": "19",
+    "type": "multiple",
+    "stem": "建构主义四大要素（情境、协作、会话、意义建构），正确的是（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "创设真实情境"
+      },
+      {
+        "key": "B",
+        "text": "小组协作学习"
+      },
+      {
+        "key": "C",
+        "text": "课堂交流会话"
+      },
+      {
+        "key": "D",
+        "text": "主动建构知识意义"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-multiple-059",
+    "number": "20",
+    "type": "multiple",
+    "stem": "有效课堂管理目标（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "维持课堂秩序"
+      },
+      {
+        "key": "B",
+        "text": "促进学生自主管理"
+      },
+      {
+        "key": "C",
+        "text": "预防问题行为"
+      },
+      {
+        "key": "D",
+        "text": "压制学生个性"
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-060",
+    "number": "1",
+    "type": "judgment",
+    "stem": "群体凝聚力越高，学习与工作效率一定越高。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "F"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-061",
+    "number": "2",
+    "type": "judgment",
+    "stem": "发现学习一定优于接受学习。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "F"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-062",
+    "number": "3",
+    "type": "judgment",
+    "stem": "复述策略属于元认知策略。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "F"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-063",
+    "number": "4",
+    "type": "judgment",
+    "stem": "定势对问题解决既有积极作用也有消极作用。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "T"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-064",
+    "number": "5",
+    "type": "judgment",
+    "stem": "最近发展区是学生独立解决问题水平与成人帮助下解决问题水平的差距。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "T"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-065",
+    "number": "6",
+    "type": "judgment",
+    "stem": "道德行为是衡量品德高低最重要标志。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "T"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-066",
+    "number": "7",
+    "type": "judgment",
+    "stem": "耶克斯‑多德森定律说明任务越难，最佳动机水平越高。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "F"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-067",
+    "number": "8",
+    "type": "judgment",
+    "stem": "高焦虑一定带来更好考试成绩。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "F"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-068",
+    "number": "9",
+    "type": "judgment",
+    "stem": "学习是个体在特定情境下由于练习或反复经验而产生的行为或行为潜能相对持久的变化。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "T"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-069",
+    "number": "10",
+    "type": "judgment",
+    "stem": "元认知就是对认知的认知。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "T"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-070",
+    "number": "11",
+    "type": "judgment",
+    "stem": "附属内驱力在成年阶段依然是最主要学习动机。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "F"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-071",
+    "number": "12",
+    "type": "judgment",
+    "stem": "阿特金森认为高成就动机者回避中等难度任务。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "F"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-072",
+    "number": "13",
+    "type": "judgment",
+    "stem": "正迁移就是促进后续学习的迁移。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "T"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-073",
+    "number": "14",
+    "type": "judgment",
+    "stem": "观察学习不需要强化也可以习得行为。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "T"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-074",
+    "number": "15",
+    "type": "judgment",
+    "stem": "人本主义强调尊重学生情感与自我实现需求。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "T"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-075",
+    "number": "16",
+    "type": "judgment",
+    "stem": "心理健康就是完全没有负面情绪。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "F"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-076",
+    "number": "17",
+    "type": "judgment",
+    "stem": "短时记忆容量大约 7±2 个组块。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "T"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-077",
+    "number": "18",
+    "type": "judgment",
+    "stem": "画思维导图属于组织策略。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "T"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-078",
+    "number": "19",
+    "type": "judgment",
+    "stem": "教师威信一旦形成就不会发生变化。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "F"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-judgment-079",
+    "number": "20",
+    "type": "judgment",
+    "stem": "非正式群体一定破坏班级管理秩序。",
+    "options": [
+      {
+        "key": "T",
+        "text": "正确"
+      },
+      {
+        "key": "F",
+        "text": "错误"
+      }
+    ],
+    "answer": [
+      "F"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
+  },
+  {
+    "id": "psychology-training-single-5-001",
+    "number": "5",
+    "type": "single",
+    "stem": "奥苏贝尔认为，学生为赢得他人赞许而学习属于（）",
+    "options": [
+      {
+        "key": "A",
+        "text": "认知内驱力"
+      },
+      {
+        "key": "B",
+        "text": "自我提高内驱力"
+      },
+      {
+        "key": "C",
+        "text": "附属内驱力"
+      },
+      {
+        "key": "D",
+        "text": "外部诱因"
+      }
+    ],
+    "answer": [
+      "C"
+    ],
+    "explanation": "来源：高等教育心理学岗前培训考试复习资料。",
+    "source": "ZCQ"
   }
 ]

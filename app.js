@@ -416,7 +416,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0655';
+    version.textContent = ' · 版本 2026.09.18-0702';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };

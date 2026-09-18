@@ -47,7 +47,7 @@ npm start
 
 ## 题库数据
 
-- 教育心理学：单选 135、多选 85、判断 240，共 460 题。
+- 教育心理学：单选 175、多选 105、判断 260，共 540 题。
 - 教育学：独立题库，共 741 题；切换科目后不会混入教育心理学进度。
 - 题库文件：[`data/questions.json`](data/questions.json)、[`data/education.json`](data/education.json)。
 
