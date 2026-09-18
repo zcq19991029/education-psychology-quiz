@@ -184,7 +184,6 @@ function renderFeedback(q) {
   let aiHtml = analysis + tip;
   if (explanationState?.status === 'loading') aiHtml += `<div class="stream-analysis"><strong>AI 正在逐项解析…</strong>${explanationState.text ? `<div class="stream-text">${esc(explanationState.text)}</div>` : ''}</div>`;
   else if (explanationState?.status === 'error') aiHtml += `<p class="error-message">AI 解析失败：${esc(explanationState.text)} <button id="retryExplainBtn" type="button" class="text-btn">重试</button></p>`;
-  else if (analysis && !details?._tip && getSettings().apiKey) aiHtml += '<button id="retryExplainBtn" type="button" class="text-btn">补充速记技巧</button>';
   else if (!analysis && !getSettings().apiKey) aiHtml = '<p class="ai-message">想看四个选项各自的原因？<button id="openAiSettingsBtn" class="text-btn">设置 AI Key</button></p>';
   else if (!analysis) aiHtml = '<button id="retryExplainBtn" type="button" class="text-btn">查看 AI 逐项解析</button>';
   return `<div class="feedback"><div class="feedback-header ${correct ? 'good' : 'bad'}"><span>${correct ? '✓' : '✗'}</span>${correct ? '回答正确' : '回答有误'}</div><div class="feedback-detail">
@@ -260,7 +259,7 @@ function submit() {
 async function generateExplanation() {
   const q = currentQuestion(); if (!q || !answered) return;
   const id = currentId, selection = [...selected], requestProfile = profileId, requestSubject = subject;
-  const settings = getSettings(), cacheKey = `${requestProfile}:${settings.baseUrl}:${settings.model}:tip-v2:${q.id}:${selection.join(',')}`;
+  const settings = getSettings(), cacheKey = `${requestProfile}:${settings.baseUrl}:${settings.model}:tip-v3:${q.id}:${selection.join(',')}`;
   if (explanationCache.has(cacheKey)) { explanationState = { status: 'done', details: explanationCache.get(cacheKey) }; renderCard(); return; }
   explanationState = { status: 'loading' }; renderCard();
   try {
@@ -430,6 +429,7 @@ function bind() {
     version.textContent = ' · 版本 2026.09.18-0703';
     versionHost.appendChild(version);
     version.textContent = ' · 版本 2026.09.18-0715';
+    version.textContent = ' · 版本 2026.09.18-0730';
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
   $('#addProfileBtn').onclick = async () => {
