@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609181146';
+const DATA_VERSION = '202609181223';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -531,7 +531,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-1146';
+    version.textContent = ' · 版本 2026.09.18-1223';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
@@ -544,7 +544,7 @@ function bind() {
   document.querySelectorAll('[data-subject]').forEach(button => button.onclick = async () => { subject = button.dataset.subject; savePrefs(); await switchContext(); });
   document.querySelectorAll('[data-view]').forEach(button => button.onclick = () => setView(button.dataset.view));
   document.querySelectorAll('[data-type]').forEach(button => button.onclick = () => { type = button.dataset.type; savePrefs(); renderControls(); round = 1; buildQueue(); });
-  document.querySelectorAll('[data-mode]').forEach(button => button.onclick = () => { mode = button.dataset.mode; savePrefs(); renderControls(); round = 1; buildQueue(); });
+  document.querySelectorAll('[data-mode]').forEach(button => button.onclick = () => { mode = button.dataset.mode; savePrefs(); renderControls(); round = 1; buildQueue(false); });
   $('#scopeSelect').onchange = event => { scope = event.target.value; savePrefs(); round = 1; buildQueue(); };
   $('#knownBtn').onclick = () => classify('known'); $('#unknownBtn').onclick = () => classify('unknown');
   $('#prevBtn').onclick = previousCard; $('#nextBtn').onclick = skipNext;
