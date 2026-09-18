@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609181402';
+const DATA_VERSION = '202609181403';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -300,14 +300,11 @@ function renderCard() {
   $('#progressFill').style.width = `${Math.round(practiced / Math.max(1, total) * 100)}%`;
   $('#knownBtn').disabled = !q || !answered; $('#unknownBtn').disabled = !q || !answered;
   if (answerRevealMode) {
-    const coveredIds = new Set([
-      ...moduleQuestions.filter(item => recordFor(item.id).attempts > 0).map(item => item.id),
-      ...answerRevealSeen
-    ]);
-    const quickCovered = coveredIds.size;
-    const quickNew = Math.max(0, quickCovered - practiced);
-    $('#sessionText').textContent = `速通查看 ${quickCovered} / ${total} 题 · 已刷 ${practiced} · 新看 ${quickNew}`;
-    $('#progressFill').style.width = `${Math.round(quickCovered / Math.max(1, total) * 100)}%`;
+    const activeTotal = questions.filter(eligible).length;
+    const remainingAfter = queue.length + forward.length;
+    const currentPosition = Math.max(1, activeTotal - remainingAfter);
+    $('#sessionText').textContent = `速通查看：第 ${currentPosition} / ${activeTotal} 题 · 后面还有 ${remainingAfter} 题`;
+    $('#progressFill').style.width = `${Math.round(currentPosition / Math.max(1, activeTotal) * 100)}%`;
     $('#knownBtn').disabled = true; $('#unknownBtn').disabled = true;
   }
   $('#prevBtn').disabled = !history.length;
@@ -585,7 +582,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-1402';
+    version.textContent = ' · 版本 2026.09.18-1403';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
