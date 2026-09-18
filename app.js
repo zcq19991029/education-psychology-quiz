@@ -1,6 +1,8 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
+const DATA_VERSION = '202609180704';
+
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const SUBJECTS = { psychology: '教育心理学', education: '教育学' };
@@ -541,13 +543,13 @@ function bind() {
 }
 async function init() {
   try {
-    const response = await fetch('./data/questions.json');
+    const response = await fetch(`./data/questions.json?v=${DATA_VERSION}`, { cache: 'no-store' });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     builtIn = await response.json();
     if (!Array.isArray(builtIn) || !builtIn.length) throw new Error('教育心理学题库为空');
-    const educationResponse = await fetch('./data/education.json');
+    const educationResponse = await fetch(`./data/education.json?v=${DATA_VERSION}`, { cache: 'no-store' });
     if (educationResponse.ok) builtInEducation = await educationResponse.json();
-    const papersResponse = await fetch('./data/education-papers.json');
+    const papersResponse = await fetch(`./data/education-papers.json?v=${DATA_VERSION}`, { cache: 'no-store' });
     if (papersResponse.ok) papers = await papersResponse.json();
     const first = builtIn.find(q => q.id === 'single-1');
     if (first) first.optionExplanations = {
