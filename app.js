@@ -403,7 +403,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0549';
+    version.textContent = ' · 版本 2026.09.18-0600';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
@@ -451,6 +451,9 @@ function bind() {
     try { await document.documentElement.requestFullscreen?.(); } catch { /* 浏览器拒绝全屏时仍保留沉浸布局 */ }
   };
   $('#immersiveNav').onclick = () => $('#immersiveBtn').click();
+  $('#guideNav').onclick = () => $('#guideDialog')?.showModal();
+  $('#closeGuide').onclick = () => $('#guideDialog')?.close();
+  $('#resetNav').onclick = () => $('#resetDialog')?.showModal();
   document.addEventListener('fullscreenchange', () => {
     if (!document.fullscreenElement && document.body.classList.contains('immersive-mode')) exitImmersive();
   });
