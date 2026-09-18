@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609180947';
+const DATA_VERSION = '202609180953';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -23,7 +23,7 @@ function recordKey() { return `zcq-progress-v2:${profileId}:${subject}`; }
 function prefsKey() { return `zcq-prefs-v1:${profileId}`; }
 function savePrefs() { localStorage.setItem(prefsKey(), JSON.stringify({ subject, type, mode, scope })); }
 const THEME_KEY = 'zcq-theme-v1';
-function applyTheme(theme = {}) { const name = ['green', 'blue', 'purple', 'warm'].includes(theme.name) ? theme.name : 'green'; document.body.classList.remove('theme-blue', 'theme-purple', 'theme-warm'); if (name !== 'green') document.body.classList.add(`theme-${name}`); document.body.style.setProperty('--custom-theme-image', theme.image ? `url("${theme.image}")` : 'none'); }
+function applyTheme(theme = {}) { const name = ['green', 'blue', 'purple', 'warm'].includes(theme.name) ? theme.name : 'green'; const opacity = Math.min(100, Math.max(45, Number(theme.opacity) || 90)); document.body.classList.remove('theme-blue', 'theme-purple', 'theme-warm'); if (name !== 'green') document.body.classList.add(`theme-${name}`); document.body.style.setProperty('--custom-theme-image', theme.image ? `url("${theme.image}")` : 'none'); document.body.style.setProperty('--surface-alpha', opacity / 100); const slider = $('#themeOpacity'); if (slider) { slider.value = opacity; $('#themeOpacityValue').textContent = `${opacity}%`; } }
 function loadTheme() { try { applyTheme(JSON.parse(localStorage.getItem(THEME_KEY) || '{}')); } catch { applyTheme(); } }
 function saveTheme(next) { localStorage.setItem(THEME_KEY, JSON.stringify(next)); applyTheme(next); }
 function loadPrefs() {
@@ -509,7 +509,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-0947';
+    version.textContent = ' · 版本 2026.09.18-0953';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
@@ -548,7 +548,8 @@ function bind() {
   $('#themeNav').onclick = () => $('#themeDialog').showModal();
   $('#closeTheme').onclick = () => $('#themeDialog').close();
   document.querySelectorAll('[data-theme]').forEach(button => button.onclick = () => { const current = JSON.parse(localStorage.getItem(THEME_KEY) || '{}'); saveTheme({ ...current, name: button.dataset.theme }); });
-  $('#clearThemeImage').onclick = () => { const current = JSON.parse(localStorage.getItem(THEME_KEY) || '{}'); delete current.image; saveTheme(current); $('#themeImage').value = ''; $('#themeStatus').textContent = '已移除自定义背景图'; };
+  $('#themeOpacity').oninput = event => { const current = JSON.parse(localStorage.getItem(THEME_KEY) || '{}'); saveTheme({ ...current, opacity: Number(event.target.value) }); };
+  $('#resetTheme').onclick = () => { localStorage.removeItem(THEME_KEY); applyTheme({ name: 'green', opacity: 90 }); $('#themeImage').value = ''; $('#themeStatus').textContent = '已恢复默认绿色主题与背景'; };
   $('#themeImage').onchange = event => { const file = event.target.files[0]; if (!file) return; if (file.size > 3 * 1024 * 1024) { $('#themeStatus').textContent = '请上传小于 3MB 的图片'; event.target.value = ''; return; } const reader = new FileReader(); reader.onload = () => { const current = JSON.parse(localStorage.getItem(THEME_KEY) || '{}'); try { saveTheme({ ...current, image: reader.result }); $('#themeStatus').textContent = `已应用：${file.name}`; } catch { $('#themeStatus').textContent = '图片过大，无法保存在浏览器，请换一张更小的图片'; } }; reader.readAsDataURL(file); };
   const askWindow = $('#aiAskWindow');
   $('#aiAskLauncher').onclick = () => {
