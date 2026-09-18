@@ -419,6 +419,7 @@ function bind() {
     version.className = 'app-version';
     version.textContent = ' · 版本 2026.09.18-0703';
     versionHost.appendChild(version);
+    version.textContent = ' · 版本 2026.09.18-0705';
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
   $('#addProfileBtn').onclick = async () => {
@@ -510,7 +511,6 @@ function bind() {
   });
   card.addEventListener('pointerdown', event => {
     swipeStart = { x: event.clientX, y: event.clientY, pointerId: event.pointerId };
-    card.setPointerCapture?.(event.pointerId);
     card.classList.add('is-dragging');
   });
   card.addEventListener('pointermove', event => {
