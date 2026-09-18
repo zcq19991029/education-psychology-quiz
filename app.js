@@ -97,14 +97,23 @@ function renderFeedback(q) {
   const selectedText = [...selected].join('、');
   const wrongChoices = [...selected].filter(a => !q.answer.includes(a));
   const missedChoices = q.answer.filter(a => !selected.has(a));
+  const labelFor = (key) => {
+    const option = q.options.find(item => item.key === key);
+    return option ? `${key}「${option.text}」` : key;
+  };
+  const correctDetails = q.answer.map(labelFor).join('、');
   const explanation = q.explanation?.trim();
   const selectedDescription = q.type === 'judgment' ? (selected.has('T') ? '正确' : '错误') : selectedText;
+  const isExclusion = /不属于|不包括|不正确|不是|不符合|错误的|描述错/.test(q.stem);
+  const sourceNote = q.type === 'judgment'
+    ? `原题库将这句话判为「${answerText(q)}」。原资料未附进一步的知识点说明。`
+    : `${isExclusion ? '本题要求找出不符合题意的选项。' : '按原题库标注，'}应选 ${correctDetails}。原资料未附进一步的知识点说明。`;
   return `<div class="feedback">
     <div class="feedback-header ${correct ? 'good' : 'bad'}"><span>${correct ? '✓' : '✕'}</span>${correct ? '回答正确，继续保持' : '回答有误，看看答案'}</div>
     <div class="feedback-detail"><p class="answer-label"><strong>正确答案：</strong>${escapeHtml(answerText(q))}</p>
       <p><strong>你的作答：</strong>${escapeHtml(selectedDescription)}</p>
-      ${!correct ? `<p><strong>错误提示：</strong>${wrongChoices.length ? `你选的 ${escapeHtml(wrongChoices.join('、'))} 与原题库答案不符。` : ''}${missedChoices.length ? ` ${escapeHtml(missedChoices.join('、'))} 是需要选出的正确项。` : ''}</p>` : ''}
-      <p><strong>答案解析：</strong>${explanation ? escapeHtml(explanation) : `原 PDF 仅给出答案，未附文字解析。请对照绿色选项理解题干${q.type === 'multiple' ? '，多选题需全部选对' : ''}。`}</p>
+      ${!correct ? `<p><strong>错误提示：</strong>${wrongChoices.length ? `错选 ${escapeHtml(wrongChoices.map(labelFor).join('、'))}。` : ''}${missedChoices.length ? ` 漏选 ${escapeHtml(missedChoices.map(labelFor).join('、'))}。` : ''}</p>` : ''}
+      <p><strong>答案解析：</strong>${escapeHtml(explanation || sourceNote)}</p>
     </div>
   </div>`;
 }
