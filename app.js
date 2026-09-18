@@ -399,6 +399,13 @@ async function confirmImport() {
   $('#importPreview').classList.add('hidden'); importDraft = []; await switchContext(); setView('practice');
 }
 function bind() {
+  const versionHost = document.querySelector('.top-right');
+  if (versionHost && !document.querySelector('.app-version')) {
+    const version = document.createElement('strong');
+    version.className = 'app-version';
+    version.textContent = ' · 版本 2026.09.18-0549';
+    versionHost.appendChild(version);
+  }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
   $('#addProfileBtn').onclick = async () => {
     const name = prompt('新学习账号名称（仅保存在这台设备上）：')?.trim();
@@ -468,7 +475,8 @@ function bind() {
     if (event.key === 'Escape' && document.body.classList.contains('immersive-mode')) { exitImmersive(); return; }
     if (view !== 'practice' || $('#resetDialog').open || event.altKey || event.ctrlKey || event.metaKey || ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
     const q = currentQuestion(); if (!q) return;
-    if (/^[1-4]$/.test(event.key) && !answered) choose(q.options[Number(event.key) - 1]?.key);
+    const numberKey = (/^[1-4]$/.test(event.key) && event.key) || ({ Numpad1: '1', Numpad2: '2', Numpad3: '3', Numpad4: '4' }[event.code]);
+    if (numberKey && !answered) { event.preventDefault(); choose(q.options[Number(numberKey) - 1]?.key); }
     else if (event.key === 'Enter' && q.type === 'multiple' && !answered) submit();
     else if (event.key === 'ArrowLeft' && answered) classify('known');
     else if (event.key === 'ArrowRight' && answered) classify('unknown');
