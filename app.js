@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609181336';
+const DATA_VERSION = '202609181341';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -11,6 +11,8 @@ const ACTIVE_PROFILE_KEY = 'zcq-active-profile-v1';
 let builtIn = [], builtInEducation = [], papers = [], imported = [], questions = [], records = {};
 const ANSWER_OVERRIDE_KEY = 'zcq-answer-overrides-v1';
 let answerOverrides = {};
+let revealedOnly = false;
+let answerRevealMode = false;
 let importedBanks = { psychology: [], education: [] };
 let profiles = [], profileId = '', subject = 'psychology', view = 'practice';
 let type = 'single', mode = 'sequential', scope = 'remaining', queue = [], currentId = null, selected = new Set(), answered = false, round = 1, viewed = 0;
@@ -142,7 +144,9 @@ function nextCard() {
     if (!ids.length) { currentId = null; render(); saveSession(); return; }
     round++; queue = mode === 'random' ? shuffle(ids) : ids; next = queue.shift(); viewed = 0;
   }
-  currentId = next; selected = new Set(); answered = false; explanationState = null; hydrateReviewCard(); render(); saveSession();
+  currentId = next; selected = new Set(); answered = false; revealedOnly = false; explanationState = null; hydrateReviewCard();
+  if (answerRevealMode) { selected = new Set(currentQuestion().answer); answered = true; revealedOnly = true; }
+  render(); saveSession();
 }
 function previousCard() {
   if (!history.length || transitioning) return;
@@ -299,7 +303,7 @@ function renderCard() {
   card.innerHTML = `<div class="card-head"><span class="pill">${typeName}</span><span class="source-page">题目来源：ZCQ</span></div>
     <h3 class="question-title">${esc(q.stem)}</h3><div class="option-list">${q.options.map(o => renderOption(q, o)).join('')}</div>
     ${q.type === 'multiple' && !answered ? `<div class="submit-row"><button class="submit-btn" id="submitAnswer" ${selected.size ? '' : 'disabled'}>确认答案</button></div>` : ''}
-    ${answered ? renderFeedback(q) : ''}${answered && scope === 'reviewed' ? '<button id="retryAnswerBtn" class="retry-answer">重新作答</button>' : ''}${answered && scope === 'known' ? '<button id="restoreKnownBtn" class="retry-answer">移回待掌握，重新刷</button>' : ''}<button id="showAllAnswersBtn" class="immersive-answer-sheet-btn" type="button">一键显示全部题目答案</button>`;
+    ${answered ? renderFeedback(q) : ''}${answered && scope === 'reviewed' ? '<button id="retryAnswerBtn" class="retry-answer">重新作答</button>' : ''}${answered && scope === 'known' ? '<button id="restoreKnownBtn" class="retry-answer">移回待掌握，重新刷</button>' : ''}<button id="showAnswerBtn" class="immersive-answer-sheet-btn" type="button">${answerRevealMode ? '关闭答案显示' : '一键显示答案'}</button>`;
   card.querySelectorAll('[data-option]').forEach(button => {
     let timer = null, longPressed = false;
     button.onclick = () => { if (longPressed) { longPressed = false; return; } choose(button.dataset.option); };
@@ -307,18 +311,12 @@ function renderCard() {
     ['pointerup', 'pointerleave', 'pointercancel'].forEach(name => button.addEventListener(name, () => { clearTimeout(timer); timer = null; }));
   });
   $('#submitAnswer')?.addEventListener('click', submit);
-  $('#showAllAnswersBtn')?.addEventListener('click', renderAnswerSheet);
+  $('#showAnswerBtn')?.addEventListener('click', () => { answerRevealMode = !answerRevealMode; if (answerRevealMode) { selected = new Set(q.answer); answered = true; revealedOnly = true; } else { selected = new Set(); answered = false; revealedOnly = false; explanationState = null; } renderCard(); });
   $('#openAiSettingsBtn')?.addEventListener('click', () => setView('settings'));
   $('#restoreKnownBtn')?.addEventListener('click', () => classify('unknown'));
   $('#retryAnswerBtn')?.addEventListener('click', () => { selected = new Set(); answered = false; explanationState = null; renderCard(); saveSession(); });
   $('#adoptAiAnswerBtn')?.addEventListener('click', () => { const choice = [...$('#aiAnswerChoice').selectedOptions].map(option => option.value); adoptAiAnswer(q, choice); });
   $('#keepBankAnswerBtn')?.addEventListener('click', event => { keepBankAnswer(q); event.currentTarget.textContent = '已恢复题库答案'; event.currentTarget.disabled = true; });
-}
-function renderAnswerSheet() {
-  const card = $('#questionCard');
-  const items = questions.filter(item => item.type === type);
-  card.innerHTML = `<div class="answer-sheet-head"><div><span class="pill">答案速览</span><h3>全部${esc(SUBJECTS[subject])}答案</h3><p>仅显示答案，不改变作答记录。</p></div><button id="closeAnswerSheetBtn" class="retry-answer" type="button">返回当前题</button></div><div class="answer-sheet-list">${items.map((item, index) => `<div class="answer-sheet-row"><b>${index + 1}. ${esc(item.answer.join('、'))}</b><span>${esc(item.stem)}</span></div>`).join('')}</div>`;
-  $('#closeAnswerSheetBtn').onclick = renderCard;
 }
 function keepBankAnswer(q) {
   if (!q) return;
@@ -569,7 +567,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-1336';
+    version.textContent = ' · 版本 2026.09.18-1341';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
