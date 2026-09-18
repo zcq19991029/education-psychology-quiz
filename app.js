@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609181255';
+const DATA_VERSION = '202609181302';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -263,7 +263,7 @@ function renderFeedback(q) {
   const tip = details?._tip
     ? `<div class="memory-tip"><strong>✦ 速记技巧</strong><span>${esc(details._tip)}</span></div>`
     : details ? '<p class="tip-unavailable">本题暂无可靠口诀或合适联想，因此不额外编造。</p>' : '';
-  const adoptButton = details?._reviewAnswer?.length ? `<span class="ai-review-controls"><select id="aiAnswerChoice" aria-label="选择要采用的正确答案" ${q.type === 'multiple' ? 'multiple' : ''}>${q.options.map(option => `<option value="${esc(option.key)}" ${details._reviewAnswer.includes(option.key) ? 'selected' : ''}>采用 ${esc(option.key)}</option>`).join('')}</select><button id="adoptAiAnswerBtn" type="button" class="ai-adopt-btn">采用所选答案</button><button id="keepBankAnswerBtn" type="button" class="ai-keep-btn">保留题库答案</button><small class="ai-local-only">仅保存到本机</small></span>` : '';
+  const adoptButton = details?._reviewAnswer?.length ? `<span class="ai-review-controls"><select id="aiAnswerChoice" aria-label="选择 AI 建议的答案" ${q.type === 'multiple' ? 'multiple' : ''}>${q.options.map(option => `<option value="${esc(option.key)}" ${details._reviewAnswer.includes(option.key) ? 'selected' : ''}>AI 建议：${esc(option.key)}</option>`).join('')}</select><button id="adoptAiAnswerBtn" type="button" class="ai-adopt-btn">采用 AI 建议</button><button id="keepBankAnswerBtn" type="button" class="ai-keep-btn">保留题库答案</button><small class="ai-local-only">答案修改仅保存到本机</small></span>` : '';
   const review = details?._review ? `<p class="ai-review ${details._review.startsWith('建议复核') ? 'needs-review' : ''}"><strong>AI 独立复核：</strong>${esc(details._review)} ${adoptButton}</p>` : '';
   let aiHtml = analysis + review + tip;
   if (explanationState?.status === 'loading') aiHtml += `<div class="stream-analysis"><strong>AI 正在逐项解析…</strong>${explanationState.text ? `<div class="stream-text">${esc(explanationState.text)}</div>` : ''}</div>`;
@@ -311,7 +311,21 @@ function renderCard() {
   $('#restoreKnownBtn')?.addEventListener('click', () => classify('unknown'));
   $('#retryAnswerBtn')?.addEventListener('click', () => { selected = new Set(); answered = false; explanationState = null; renderCard(); saveSession(); });
   $('#adoptAiAnswerBtn')?.addEventListener('click', () => { const choice = [...$('#aiAnswerChoice').selectedOptions].map(option => option.value); adoptAiAnswer(q, choice); });
-  $('#keepBankAnswerBtn')?.addEventListener('click', event => { event.currentTarget.textContent = '已保留题库答案'; event.currentTarget.disabled = true; });
+  $('#keepBankAnswerBtn')?.addEventListener('click', event => { keepBankAnswer(q); event.currentTarget.textContent = '已恢复题库答案'; event.currentTarget.disabled = true; });
+}
+function keepBankAnswer(q) {
+  if (!q) return;
+  const bank = (subject === 'education' ? builtInEducation : builtIn).find(item => item.id === q.id);
+  if (bank) q.answer = [...bank.answer];
+  delete answerOverrides[q.id];
+  localStorage.setItem(ANSWER_OVERRIDE_KEY, JSON.stringify(answerOverrides));
+  if (answered) {
+    const previous = recordFor(q.id);
+    const nowCorrect = q.answer.length === selected.size && q.answer.every(key => selected.has(key));
+    records[q.id] = { ...previous, lastCorrect: nowCorrect };
+    saveRecords();
+  }
+  render(); saveSession();
 }
 function adoptAiAnswer(q, answer) {
   if (!q || !Array.isArray(answer) || !answer.length || answer.some(key => !q.options.some(option => option.key === key))) return;
@@ -548,7 +562,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.18-1255';
+    version.textContent = ' · 版本 2026.09.18-1302';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
