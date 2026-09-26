@@ -24,7 +24,15 @@ async function dbRequest(mode, operation) {
 }
 
 export async function loadBank(subject) {
-  return (await dbRequest('readonly', store => store.get(subject)))?.questions || [];
+  try {
+    const result = await Promise.race([
+      dbRequest('readonly', store => store.get(subject)),
+      new Promise(resolve => setTimeout(() => resolve(null), 1500))
+    ]);
+    return result?.questions || [];
+  } catch {
+    return [];
+  }
 }
 
 export async function saveBank(subject, questions) {
