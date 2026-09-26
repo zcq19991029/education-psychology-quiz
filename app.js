@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609262357';
+const DATA_VERSION = '202609270004';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -573,16 +573,31 @@ function bind() {
   if (sidebar && !document.querySelector('#updateNav')) {
     const update = document.createElement('button');
     update.id = 'updateNav'; update.className = 'nav-item update-nav'; update.type = 'button';
-    update.innerHTML = '<span>↻</span> 检查更新';
-    update.title = '重新获取最新页面，不会清除本机刷题记录';
-    update.onclick = () => { saveSession(); savePrefs(); update.disabled = true; update.querySelector('span').textContent = '…'; location.replace(`${location.pathname}?refresh=${Date.now()}`); };
+    update.innerHTML = '<span>↻</span> 强制刷新并重置缓存';
+    update.title = '清理页面缓存后重新获取资源，不会清除本机刷题记录、主题或本地题库';
+    update.onclick = async () => {
+      saveSession(); savePrefs(); update.disabled = true; update.querySelector('span').textContent = '…';
+      try {
+        if ('caches' in window) {
+          const names = await caches.keys();
+          await Promise.all(names.map(name => caches.delete(name)));
+        }
+        if (navigator.serviceWorker) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(registrations.map(registration => registration.unregister()));
+        }
+      } catch { /* file:// 页面可能不支持 Cache Storage，仍继续强制刷新 */ }
+      const url = new URL(location.href);
+      url.searchParams.set('force-refresh', Date.now());
+      location.replace(url.href);
+    };
     sidebar.insertBefore(update, sidebar.querySelector('.sidebar-bottom'));
   }
   const versionHost = document.querySelector('.top-right');
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.26-2357';
+    version.textContent = ' · 版本 2026.09.27-0004';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
