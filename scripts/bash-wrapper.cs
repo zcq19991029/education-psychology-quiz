@@ -19,7 +19,11 @@ public static class BashWrapper
     public static int Main(string[] args)
     {
         if (args.Length < 3) return 64;
-        var command = Quote(Posix(args[0])) + " " + Quote(Posix(args[1])) + " " + Quote(Posix(args[2]));
+        // Git Bash on this Windows host decodes Chinese path arguments with the
+        // active code page. The verified ASCII junction keeps the same checkout
+        // while allowing the packager to read hosting.json and dist reliably.
+        var project = "/c/quizsite";
+        var command = Quote(Posix(args[0])) + " " + Quote(project) + " " + Quote(Posix(args[2]));
         var info = new ProcessStartInfo
         {
             FileName = @"C:\Program Files\Git\bin\bash.exe",
