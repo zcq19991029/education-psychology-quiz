@@ -40,6 +40,7 @@ export async function GET(request: Request) {
     const first = row[0];
     return Response.json({
       subject,
+      found: Boolean(first),
       questions: first ? JSON.parse(first.questionsJson) : [],
       updatedAt: first?.updatedAt ?? null,
       account: { id: user.userId, email: user.email, displayName: user.displayName },

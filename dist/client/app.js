@@ -1,10 +1,29 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
-import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
+import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport, getCloudState } from './imports.js';
 
 const DATA_VERSION = '202609280112';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function renderCloudStatus() {
+  const state = getCloudState();
+  if (state.authenticated === null) return;
+  let node = $('#cloudSyncStatus');
+  if (!node) {
+    node = document.createElement('div');
+    node.id = 'cloudSyncStatus';
+    node.style.cssText = 'position:fixed;right:22px;top:16px;z-index:30;padding:7px 12px;border:1px solid var(--line,#d9e5dd);border-radius:999px;background:color-mix(in srgb,var(--surface,#fff) 92%,transparent);font-size:12px;box-shadow:0 4px 16px rgba(30,70,50,.08)';
+    document.body.appendChild(node);
+  }
+  if (state.authenticated) {
+    node.textContent = '✓ 云端题库已同步';
+    node.style.color = 'var(--success,#2d9f61)';
+  } else {
+    node.innerHTML = '<a href="/signin-with-chatgpt?return_to=/" style="color:inherit;text-decoration:none">登录 ChatGPT 后同步云端</a>';
+    node.style.color = 'var(--muted,#6d8175)';
+  }
+}
 const SUBJECTS = { psychology: '教育心理学', education: '教育学' };
 const PROFILE_KEY = 'zcq-profiles-v1';
 const ACTIVE_PROFILE_KEY = 'zcq-active-profile-v1';
@@ -461,6 +480,7 @@ async function switchContext() {
   importedBanks = { psychology: psychologyBank, education: educationBank };
   imported = importedBanks[subject];
   questions = mergeQuestions(subject === 'psychology' ? builtIn : builtInEducation, imported);
+  renderCloudStatus();
   loadRecords(); round = 1; buildQueue();
   for (const element of document.querySelectorAll('[data-subject]')) element.classList.toggle('active', element.dataset.subject === subject);
   $('#papersNav').classList.toggle('hidden', subject !== 'education');
@@ -562,8 +582,14 @@ async function confirmImport() {
   const fresh = importDraft.filter(q => duplicateDecisions.get(q.id) !== 'remove').map(q => ({
     ...q, ...(duplicateDecisions.get(q.id) === 'keep' ? { keepDuplicate: true } : {})
   }));
-  await saveBank(subject, [...existing, ...fresh]);
-  $('#importStatus').textContent = `已导入 ${fresh.length} 题，按你的选择删除 ${importDraft.length - fresh.length} 道重复题。`;
+  const saved = await saveBank(subject, [...existing, ...fresh]);
+  renderCloudStatus();
+  const syncHint = saved.cloud
+    ? '已同步到云端。'
+    : saved.authenticated === false
+      ? '当前未登录，仅保存到本机；登录 ChatGPT 后再次导入即可同步云端。'
+      : '云端暂不可用，已保存到本机；网络恢复后可再次导入同步。';
+  $('#importStatus').textContent = `已导入 ${fresh.length} 题，按你的选择删除 ${importDraft.length - fresh.length} 道重复题。${syncHint}`;
   $('#importPreview').classList.add('hidden'); importDraft = []; await switchContext(); setView('practice');
 }
 function bind() {

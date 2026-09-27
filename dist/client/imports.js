@@ -2,6 +2,41 @@ import { chat } from './ai.js';
 
 const DB_NAME = 'zcq-question-banks-v1';
 const STORE = 'banks';
+const CLOUD_TIMEOUT_MS = 2500;
+
+let cloudState = { authenticated: null, lastError: '' };
+
+async function cloudRequest(subject, init = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), CLOUD_TIMEOUT_MS);
+  try {
+    const query = new URLSearchParams({ subject });
+    const response = await fetch(`/api/question-banks?${query}`, {
+      ...init,
+      signal: controller.signal,
+      headers: { Accept: 'application/json', ...(init.headers || {}) },
+      cache: 'no-store',
+    });
+    let payload = null;
+    try { payload = await response.json(); } catch { /* keep the status */ }
+    if (response.status === 401) {
+      cloudState = { authenticated: false, lastError: '' };
+      return { ok: false, authenticated: false, status: response.status, payload };
+    }
+    if (!response.ok) throw new Error(payload?.error || `HTTP ${response.status}`);
+    cloudState = { authenticated: true, lastError: '' };
+    return { ok: true, authenticated: true, status: response.status, payload };
+  } catch (error) {
+    cloudState = { authenticated: cloudState.authenticated, lastError: String(error?.message || error) };
+    return { ok: false, authenticated: cloudState.authenticated, status: 0, payload: null };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+export function getCloudState() {
+  return { ...cloudState };
+}
 
 function openDb() {
   return new Promise((resolve, reject) => {
@@ -24,6 +59,12 @@ async function dbRequest(mode, operation) {
 }
 
 export async function loadBank(subject) {
+  const cloud = await cloudRequest(subject);
+  if (cloud.ok && cloud.payload && Array.isArray(cloud.payload.questions)) {
+    // A successful empty response means this signed-in account has no cloud
+    // bank yet. Do not merge another account's browser cache into it.
+    return cloud.payload.questions;
+  }
   try {
     const result = await Promise.race([
       dbRequest('readonly', store => store.get(subject)),
@@ -37,6 +78,12 @@ export async function loadBank(subject) {
 
 export async function saveBank(subject, questions) {
   await dbRequest('readwrite', store => store.put({ subject, questions, updatedAt: Date.now() }));
+  const cloud = await cloudRequest(subject, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ subject, questions }),
+  });
+  return { local: true, cloud: cloud.ok, authenticated: cloud.authenticated, error: cloudState.lastError };
 }
 
 export async function readMaterial(file) {
