@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./db-Bq2qBAiH.js";async function r(){let r=await t();try{return await n().run(e`select 1`),Response.json({ok:!0,authenticated:!!r,userId:r?.userId??null})}catch(e){return console.error(`D1 health check failed`,e),Response.json({ok:!1,authenticated:!!r,error:`D1 unavailable`},{status:503})}}export{r as GET};

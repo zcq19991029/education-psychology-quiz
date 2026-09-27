@@ -7,7 +7,12 @@ data/pdf-lines.json
 data/source.txt
 node_modules/
 output/
-scripts/
 .playwright-cli/
 .DS_Store
 sites-package.tar.gz
+.next/
+.vinext/
+.wrangler/
+.sites-runtime/
+tsconfig.tsbuildinfo
+.node22/

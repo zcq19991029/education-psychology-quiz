@@ -1,0 +1,306 @@
+{
+  "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/app/api/health/route.ts": {
+    "file": "_next/static/route-B5WDCk86.js",
+    "name": "route",
+    "src": "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/app/api/health/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_db-Bq2qBAiH.js"
+    ]
+  },
+  "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/app/api/question-banks/route.ts": {
+    "file": "_next/static/route-AVwpfApl.js",
+    "name": "route",
+    "src": "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/app/api/question-banks/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_db-Bq2qBAiH.js"
+    ]
+  },
+  "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/app/page.tsx": {
+    "file": "_next/static/page-B7yiCun9.js",
+    "name": "page",
+    "src": "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/app/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_framework~index~layout~page~app-page-cache-render~app-page-cache~app-route-handler-dispatch-C1migl0z.js"
+    ]
+  },
+  "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-page-cache-render.js": {
+    "file": "_next/static/app-page-cache-render-DmUUQNNU.js",
+    "name": "app-page-cache-render",
+    "src": "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-page-cache-render.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_cache-headers-NfG--ImO.js",
+      "_app-page-stream-BXKGm-WU.js",
+      "_text-stream-WuXgTzDY.js",
+      "_implicit-tags-u4esIVgN.js",
+      "_headers-j0QAsRga.js"
+    ]
+  },
+  "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-page-cache.js": {
+    "file": "_next/static/app-page-cache-BAlL6Htq.js",
+    "name": "app-page-cache",
+    "src": "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-page-cache.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_navigation-runtime-DnyjN2I9.js",
+      "_isr-cache-rKJGEUy1.js",
+      "_cache-headers-NfG--ImO.js",
+      "_app-page-cache-finalizer-CaVRWyvH.js",
+      "_text-stream-WuXgTzDY.js",
+      "_headers-BBgHuOI_.js"
+    ]
+  },
+  "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-prerender-endpoints.js": {
+    "file": "_next/static/app-prerender-endpoints-D2hc8Sv_.js",
+    "name": "app-prerender-endpoints",
+    "src": "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-prerender-endpoints.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_app-prerender-static-params-u-90lFR9.js",
+      "_root-params-CarSBhWB.js"
+    ]
+  },
+  "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-route-handler-dispatch.js": {
+    "file": "_next/static/app-route-handler-dispatch-DnnVZPYR.js",
+    "name": "app-route-handler-dispatch",
+    "src": "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-route-handler-dispatch.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-DUnMT5BP.js",
+      "_app-segment-config-BaiWrz6L.js",
+      "_framework~index~route~route~layout~page~app-page-cache-render~app-page-cache~app-route-hand~b8ztdu4k-DRhe-H_-.js",
+      "_navigation-runtime-DnyjN2I9.js",
+      "_isr-cache-rKJGEUy1.js",
+      "_cache-headers-NfG--ImO.js",
+      "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-static-generation.js",
+      "_headers-BBgHuOI_.js",
+      "_root-params-CarSBhWB.js",
+      "_implicit-tags-u4esIVgN.js",
+      "_headers-j0QAsRga.js",
+      "_navigation-errors-qe6yl4gt.js"
+    ],
+    "dynamicImports": [
+      "_headers-j0QAsRga.js"
+    ]
+  },
+  "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-static-generation.js": {
+    "file": "_next/static/app-static-generation-SNz_5i4M.js",
+    "name": "app-static-generation",
+    "src": "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-static-generation.js",
+    "isDynamicEntry": true
+  },
+  "_app-page-cache-finalizer-CaVRWyvH.js": {
+    "file": "_next/static/app-page-cache-finalizer-CaVRWyvH.js",
+    "name": "app-page-cache-finalizer",
+    "imports": [
+      "_isr-cache-rKJGEUy1.js",
+      "_cache-headers-NfG--ImO.js",
+      "_text-stream-WuXgTzDY.js",
+      "_headers-BBgHuOI_.js"
+    ]
+  },
+  "_app-page-stream-BXKGm-WU.js": {
+    "file": "_next/static/app-page-stream-BXKGm-WU.js",
+    "name": "app-page-stream",
+    "imports": [
+      "_rolldown-runtime-DUnMT5BP.js",
+      "_framework~index~route~route~layout~page~app-page-cache-render~app-page-cache~app-route-hand~b8ztdu4k-DRhe-H_-.js",
+      "_cache-headers-NfG--ImO.js",
+      "_text-stream-WuXgTzDY.js",
+      "_headers-BBgHuOI_.js",
+      "_implicit-tags-u4esIVgN.js",
+      "_headers-j0QAsRga.js"
+    ]
+  },
+  "_app-prerender-static-params-u-90lFR9.js": {
+    "file": "_next/static/app-prerender-static-params-u-90lFR9.js",
+    "name": "app-prerender-static-params",
+    "imports": [
+      "_root-params-CarSBhWB.js"
+    ]
+  },
+  "_app-segment-config-BaiWrz6L.js": {
+    "file": "_next/static/app-segment-config-BaiWrz6L.js",
+    "name": "app-segment-config",
+    "imports": [
+      "_rolldown-runtime-DUnMT5BP.js",
+      "_framework~index~app-route-handler-dispatch-B3kxf3ix.js",
+      "_isr-cache-rKJGEUy1.js",
+      "_headers-BBgHuOI_.js",
+      "_root-params-CarSBhWB.js",
+      "_implicit-tags-u4esIVgN.js",
+      "_headers-j0QAsRga.js"
+    ]
+  },
+  "_cache-headers-NfG--ImO.js": {
+    "file": "_next/static/cache-headers-NfG--ImO.js",
+    "name": "cache-headers",
+    "imports": [
+      "_rolldown-runtime-DUnMT5BP.js",
+      "_framework~index~layout~page~app-page-cache-render~app-page-cache~app-route-handler-dispatch-C1migl0z.js",
+      "_framework~index~route~route~layout~page~app-page-cache-render~app-page-cache~app-route-hand~b8ztdu4k-DRhe-H_-.js",
+      "_headers-BBgHuOI_.js",
+      "_headers-j0QAsRga.js",
+      "_record-Cz3MrZeO.js"
+    ]
+  },
+  "_db-Bq2qBAiH.js": {
+    "file": "_next/static/db-Bq2qBAiH.js",
+    "name": "db",
+    "imports": [
+      "_rolldown-runtime-DUnMT5BP.js",
+      "_navigation.react-server-BdWwrxgA.js",
+      "_headers-j0QAsRga.js"
+    ]
+  },
+  "_framework~index-DialpGXu.js": {
+    "file": "_next/static/framework~index-DialpGXu.js",
+    "name": "framework~index",
+    "imports": [
+      "_rolldown-runtime-DUnMT5BP.js",
+      "_framework~index~app-route-handler-dispatch-B3kxf3ix.js"
+    ]
+  },
+  "_framework~index~app-route-handler-dispatch-B3kxf3ix.js": {
+    "file": "_next/static/framework~index~app-route-handler-dispatch-B3kxf3ix.js",
+    "name": "framework~index~app-route-handler-dispatch",
+    "imports": [
+      "_rolldown-runtime-DUnMT5BP.js",
+      "_framework~index~route~route~layout~page~app-page-cache-render~app-page-cache~app-route-hand~b8ztdu4k-DRhe-H_-.js"
+    ]
+  },
+  "_framework~index~layout~page~app-page-cache-render~app-page-cache~app-route-handler-dispatch-C1migl0z.js": {
+    "file": "_next/static/framework~index~layout~page~app-page-cache-render~app-page-cache~app-route-handler-dispatch-C1migl0z.js",
+    "name": "framework~index~layout~page~app-page-cache-render~app-page-cache~app-route-handler-dispatch",
+    "imports": [
+      "_rolldown-runtime-DUnMT5BP.js",
+      "_framework~index~route~route~layout~page~app-page-cache-render~app-page-cache~app-route-hand~b8ztdu4k-DRhe-H_-.js"
+    ]
+  },
+  "_framework~index~route~route~layout~page~app-page-cache-render~app-page-cache~app-route-hand~b8ztdu4k-DRhe-H_-.js": {
+    "file": "_next/static/framework~index~route~route~layout~page~app-page-cache-render~app-page-cache~app-route-hand~b8ztdu4k-DRhe-H_-.js",
+    "name": "framework~index~route~route~layout~page~app-page-cache-render~app-page-cache~app-route-hand~b8ztdu4k",
+    "imports": [
+      "_rolldown-runtime-DUnMT5BP.js"
+    ]
+  },
+  "_headers-BBgHuOI_.js": {
+    "file": "_next/static/headers-BBgHuOI_.js",
+    "name": "headers"
+  },
+  "_headers-j0QAsRga.js": {
+    "file": "_next/static/headers-j0QAsRga.js",
+    "name": "headers",
+    "imports": [
+      "_headers-BBgHuOI_.js"
+    ]
+  },
+  "_implicit-tags-u4esIVgN.js": {
+    "file": "_next/static/implicit-tags-u4esIVgN.js",
+    "name": "implicit-tags",
+    "imports": [
+      "_cache-headers-NfG--ImO.js",
+      "_redirect-digest-x5mH93OF.js"
+    ]
+  },
+  "_isr-cache-rKJGEUy1.js": {
+    "file": "_next/static/isr-cache-rKJGEUy1.js",
+    "name": "isr-cache",
+    "imports": [
+      "_cache-headers-NfG--ImO.js"
+    ]
+  },
+  "_navigation-errors-qe6yl4gt.js": {
+    "file": "_next/static/navigation-errors-qe6yl4gt.js",
+    "name": "navigation-errors",
+    "imports": [
+      "_rolldown-runtime-DUnMT5BP.js",
+      "_framework~index~route~route~layout~page~app-page-cache-render~app-page-cache~app-route-hand~b8ztdu4k-DRhe-H_-.js"
+    ]
+  },
+  "_navigation-runtime-DnyjN2I9.js": {
+    "file": "_next/static/navigation-runtime-DnyjN2I9.js",
+    "name": "navigation-runtime",
+    "imports": [
+      "_cache-headers-NfG--ImO.js"
+    ]
+  },
+  "_navigation.react-server-BdWwrxgA.js": {
+    "file": "_next/static/navigation.react-server-BdWwrxgA.js",
+    "name": "navigation.react-server",
+    "imports": [
+      "_navigation-errors-qe6yl4gt.js"
+    ]
+  },
+  "_record-Cz3MrZeO.js": {
+    "file": "_next/static/record-Cz3MrZeO.js",
+    "name": "record"
+  },
+  "_redirect-digest-x5mH93OF.js": {
+    "file": "_next/static/redirect-digest-x5mH93OF.js",
+    "name": "redirect-digest"
+  },
+  "_rolldown-runtime-DUnMT5BP.js": {
+    "file": "_next/static/rolldown-runtime-DUnMT5BP.js",
+    "name": "rolldown-runtime"
+  },
+  "_root-params-CarSBhWB.js": {
+    "file": "_next/static/root-params-CarSBhWB.js",
+    "name": "root-params",
+    "imports": [
+      "_headers-BBgHuOI_.js"
+    ]
+  },
+  "_text-stream-WuXgTzDY.js": {
+    "file": "_next/static/text-stream-WuXgTzDY.js",
+    "name": "text-stream",
+    "imports": [
+      "_cache-headers-NfG--ImO.js",
+      "_headers-BBgHuOI_.js",
+      "_headers-j0QAsRga.js"
+    ]
+  },
+  "virtual:cloudflare/worker-entry": {
+    "file": "index.js",
+    "name": "index",
+    "src": "virtual:cloudflare/worker-entry",
+    "isEntry": true,
+    "imports": [
+      "_rolldown-runtime-DUnMT5BP.js",
+      "_app-segment-config-BaiWrz6L.js",
+      "_framework~index-DialpGXu.js",
+      "_framework~index~layout~page~app-page-cache-render~app-page-cache~app-route-handler-dispatch-C1migl0z.js",
+      "_framework~index~route~route~layout~page~app-page-cache-render~app-page-cache~app-route-hand~b8ztdu4k-DRhe-H_-.js",
+      "_isr-cache-rKJGEUy1.js",
+      "_cache-headers-NfG--ImO.js",
+      "_app-page-cache-finalizer-CaVRWyvH.js",
+      "_app-page-stream-BXKGm-WU.js",
+      "_text-stream-WuXgTzDY.js",
+      "_app-prerender-static-params-u-90lFR9.js",
+      "_headers-BBgHuOI_.js",
+      "_root-params-CarSBhWB.js",
+      "_implicit-tags-u4esIVgN.js",
+      "_navigation.react-server-BdWwrxgA.js",
+      "_headers-j0QAsRga.js",
+      "_navigation-errors-qe6yl4gt.js",
+      "_record-Cz3MrZeO.js"
+    ],
+    "dynamicImports": [
+      "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-prerender-endpoints.js",
+      "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-static-generation.js",
+      "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-page-cache.js",
+      "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-page-cache-render.js",
+      "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/node_modules/vinext/dist/server/app-route-handler-dispatch.js",
+      "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/app/page.tsx",
+      "virtual:cloudflare/worker-entry",
+      "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/app/api/health/route.ts",
+      "../../../../Desktop/codex项目/Ai设计/高校资格证刷题 Sites版/app/api/question-banks/route.ts"
+    ],
+    "css": [
+      "_next/static/css/index.C4SPBCkT.css"
+    ]
+  }
+}
