@@ -10,3 +10,4 @@ output/
 scripts/
 .playwright-cli/
 .DS_Store
+sites-package.tar.gz

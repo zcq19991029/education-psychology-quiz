@@ -2,7 +2,7 @@
 
 面向高校教师资格证复习的轻量刷题网站，题目来源：**ZCQ**。打开即用，支持电脑与手机，不需要注册；每个学习账号、每门科目分别保存自己的刷题进度。
 
-**在线使用：** [打开高校资格证刷题 zcq 版](https://zcq19991029.github.io/education-psychology-quiz/)
+**在线使用（Sites版）：** [打开高校资格证刷题 zcq 版](https://education-psychology-quiz-sites.zcq991029.chatgpt.site/)
 
 ![桌面端总览](docs/images/desktop.png)
 
@@ -43,7 +43,7 @@
 npm start
 ```
 
-然后打开 <http://127.0.0.1:8000>。GitHub Pages 会在 `main` 分支更新后自动部署。
+然后打开 <http://127.0.0.1:8000>。GitHub 仓库只保存源码；线上使用请打开上面的 Sites版网址。
 
 ## 题库数据
 
