@@ -1,7 +1,7 @@
 import { providers, getSettings, saveSettings, setAiProfile, chat, streamChat, listModels, explainQuestion } from './ai.js';
 import { loadBank, saveBank, readMaterial, normalizeQuestions, aiImport } from './imports.js';
 
-const DATA_VERSION = '202609270112';
+const DATA_VERSION = '202609280038';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -453,7 +453,11 @@ async function switchContext() {
   loadAnswerOverrides();
   setAiProfile(profileId); fillSettings();
   renderControls();
-  const [psychologyBank, educationBank] = await Promise.all([loadBank('psychology'), loadBank('education')]);
+  const importedBanksPromise = Promise.all([loadBank('psychology'), loadBank('education')]);
+  const [psychologyBank, educationBank] = await Promise.race([
+    importedBanksPromise,
+    new Promise(resolve => setTimeout(() => resolve([[], []]), 2500))
+  ]);
   importedBanks = { psychology: psychologyBank, education: educationBank };
   imported = importedBanks[subject];
   questions = mergeQuestions(subject === 'psychology' ? builtIn : builtInEducation, imported);
@@ -597,7 +601,7 @@ function bind() {
   if (versionHost && !document.querySelector('.app-version')) {
     const version = document.createElement('strong');
     version.className = 'app-version';
-    version.textContent = ' · 版本 2026.09.27-0112';
+    version.textContent = ' · 版本 2026.09.28-0038';
     versionHost.appendChild(version);
   }
   $('#profileSelect').onchange = async event => { profileId = event.target.value; saveProfiles(); loadPrefs(); await switchContext(); };
