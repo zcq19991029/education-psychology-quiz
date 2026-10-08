@@ -49,3 +49,8 @@ npm start -- --port 8787
 2. 修改数据库结构时先运行 `npm run db:generate`，只新增迁移，不改写已应用的迁移。
 3. 使用 Sites 提供的 `site-workflow.mjs` 完成构建、源代码推送和归档，再保存并部署对应版本。
 4. 发布后检查版本状态、线上地址和 D1 表；不要把未匹配当前提交的旧归档直接上传。
+
+
+## 产品专用维护技能
+
+[高校资格证刷题开发与维护](.agents/skills/quiz-pages-release/SKILL.md) 与产品源码一起维护，入口索引见 [skills/README.md](skills/README.md)。本机共享安装目录链接到这份原件，修改说明文档不触发产品发布。
